@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <!-- <link href = "%PUBLIC_URL%/asssets/css/bootstrap.min.css" rel="stylesheet"/> -->
+    <title>React App</title>
+    <style>
+  body {
+    margin: 0;
+}
+#toolBar ul {
+    list-style-type: none;
+    margin: 0;
+    overflow: hidden;
+    background-color: #333333;
+    position: fixed;
+    padding: 10px;
+    top: 0;
+    width: 100%;
+}
+
+#toolBar li {
+    float: left;
+}
+
+#toolBar li button {
+    display: block;
+    text-align: center;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+#toolBar li button:hover:not(.active) {
+    background-color: #111;
+}
+
+#toolBar .active {
+    background-color: #4CAF50;
+}
+#mainSection {
+  margin-top:54px;
+}
+#sideBar1 ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 270px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+#sideBar1 li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+#sideBar1 li a.active {
+    background-color: #4CAF50;
+    color: white;
+    background: green;
+}
+
+#sideBar1 li a:hover:not(.active) {
+    background-color: #555;
+    background: red;
+    color: white;
+}
+
+#contentArea {
+  box-sizing: border-box;
+  margin: 0;
+  margin-left:270px;
+  padding:1px 16px;
+  height:1000px;
+  background: #4CAF50;
+}
+
+    </style>
+  </head>
+  <body>
+    <!-- <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript> -->
+    <div class = "container-fluid" id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
