@@ -42,7 +42,7 @@ export const selectedCourseReducer = (state = activeQuestion, action) => {
 
 const defaultFilter = {
     filterDatas: {},
-    filteredData: []
+    filteredData:{}
 }
 export const filterQuestions = (state = defaultFilter, action) => {
     switch(action.type) {
@@ -50,8 +50,20 @@ export const filterQuestions = (state = defaultFilter, action) => {
         console.log(action)
         console.log(action.datas)
             return {
+                ...state,
                 filterDatas : action.datas,
-                filteredData: []
+            }
+        case "ADD_FILTERED_QUESTIONS":
+        console.log(action.datas)
+            return {
+                ...state,
+                filteredData: action.datas        
+            }
+        case "CLEAR_FILTER_QUESTION": 
+            console.log("cleared")
+            return {
+                ...state,
+                filteredData: {}
             }
         default: 
             return state;

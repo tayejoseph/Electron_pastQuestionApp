@@ -1,4 +1,4 @@
-const { ipcRenderer } = window.require('electron')
+// const { ipcRenderer } = window.require('electron')
 
 export const getQuestionData = (data) => ({
     type: "GET_QUESTIONS",
@@ -16,12 +16,7 @@ export const activeCourse = (datas) => ({
 //       dispatch({ type: ADD_VIDEOS, payload: videosWithData });
 //     });
 //   };
-
-
-
-
-
-
+// l
 // // let datas = "asdaddada"
 // export const getFilterData = data => {
 //         ipcRenderer.send("filter:send", data);
@@ -33,16 +28,16 @@ export const activeCourse = (datas) => ({
 //     console.log(filterData)
 // });
 
+export const clearFilteredQuestion = (data) => ({
+    type: "CLEAR_FILTER_QUESTION"
+})
 
 export const addFilterData = (datas) => ({
     type: "ADD_FILTER_QUESTION",
     datas
 })
 
-//     console.log("ffdjdfkjjkdjkdjdjkd")
-//     console.log(filterData)
-//     return (dispatch) => {
-//         dispatch(addFilterData(filterData))
-//     }
-//   }) 
-
+export const addFilteredData = (datas) => ({
+    type: "ADD_FILTERED_QUESTIONS",
+    datas
+})

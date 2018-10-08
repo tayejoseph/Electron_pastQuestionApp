@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {connect} from "react-redux";
-import {activeCourse} from "./../actions/contentArea";
+import {activeCourse, clearFilteredQuestion} from "./../actions/contentArea";
 
 import unis from "./uni_api2";
 
@@ -91,6 +91,7 @@ class SideBar1 extends React.Component {
       
         a.onclick = () => {
             this.props.activeCourse_Question(uni_info, activeQuestionData, activeCourseData) //this is used to add questions to the contentAreaSection
+            this.props.clearFilteredQuestion() //this is used to clear the filtered question when ever a question to be appeared to the screen is clicked
         }
         a.appendChild(text)
         li.appendChild(a);
@@ -136,6 +137,7 @@ class SideBar1 extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
+    clearFilteredQuestion: () => dispatch(clearFilteredQuestion()),
     // currentQuestion : (year, data, course) => dispatch(activeQuestion({course, year, data})),
     activeCourse_Question: (uni_info, activeQuestionData, activeCourseData) => dispatch(activeCourse({uni_info, activeQuestionData, activeCourseData}))
 })
