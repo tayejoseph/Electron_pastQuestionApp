@@ -11,13 +11,11 @@ class ToolBar extends React.Component {
         }
     }
     answerClickHandler = () => {
-        console.log(this.state.answers)
-                // console.log(this.props.filter)
-
+        // console.log(this.state.answers)
     //I am going to send the questions answers to the electron side of the app so that i can use it to update the propup window for answers
     }
     filterQuestionHandler = () => {
-        console.log(this.props.activeCourse);
+        // console.log(this.props.activeCourse);
         const { activeCourseData, activeQuestionData} = this.props.activeCourse;
         const {courseName, year} = activeQuestionData;
         const courseData = {
@@ -25,7 +23,9 @@ class ToolBar extends React.Component {
             activeCourseName: courseName,
             activeQuestionYear: year
         } //this is are all the data that we need to send to the filterSection(course datas)
-        this.props.addFilterData(courseData)
+       
+       this.props.addFilterData(courseData);
+       this.props.filterPage()
         
         // console.log(this.props.filter)
      
@@ -47,9 +47,9 @@ class ToolBar extends React.Component {
 
         //this is used to return the mode back to text mode when ever the user change/click to another question from exam mode
         document.querySelector("select").options.selectedIndex = 0;
-
+        console.log(newProps)
         //this will only enable the show solution btn only if the questions are supplied
-        if (!newProps.activeQuestion.questions) {
+        if (!newProps.activeCourse.activeQuestionData.questions) {
             console.log(this.props.disableToolBar)
             this.setState({
                 disable: false
@@ -100,7 +100,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     addFilterData: (data) => dispatch(addFilterData(data))
 })
 const mapStateToProps = (state, props) => ({
-    activeQuestion: state.activeCourse.activeQuestionData.questionData,
     activeCourse: state.activeCourse,
     filter: state.filterQuestionsData
 });

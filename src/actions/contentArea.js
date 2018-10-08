@@ -1,5 +1,5 @@
-// import { ipcRenderer } from "electron";
-// console.log(ipcRenderer)
+const { ipcRenderer } = window.require('electron')
+
 export const getQuestionData = (data) => ({
     type: "GET_QUESTIONS",
     data
@@ -10,17 +10,39 @@ export const activeCourse = (datas) => ({
     datas
 })
 
-export const addFilterData = (data) => {
-    return (dispatch) => {
-        // ipcRenderer.send("filter:on", data.activeCourseName)
-            dispatch({
-                type: "ADD_FILTER_QUESTION",
-                data
-            })
-        
-    }
-}
-export const addfilterData = (data) => ({
+// export const addVideos = videos => dispatch => {
+//     ipcRenderer.send('videos:added', videos);
+//     ipcRenderer.on('metadata:complete', (event, videosWithData) => {
+//       dispatch({ type: ADD_VIDEOS, payload: videosWithData });
+//     });
+//   };
+
+
+
+
+
+
+// // let datas = "asdaddada"
+// export const getFilterData = data => {
+//         ipcRenderer.send("filter:send", data);
+// }           
+
+
+// // export const getElectronData = () => {
+// ipcRenderer.on("filterData:Received", (event, filterData) => {
+//     console.log(filterData)
+// });
+
+
+export const addFilterData = (datas) => ({
     type: "ADD_FILTER_QUESTION",
-    data
+    datas
 })
+
+//     console.log("ffdjdfkjjkdjkdjdjkd")
+//     console.log(filterData)
+//     return (dispatch) => {
+//         dispatch(addFilterData(filterData))
+//     }
+//   }) 
+

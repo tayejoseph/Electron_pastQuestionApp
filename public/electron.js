@@ -1,18 +1,13 @@
 const electron = require("electron");
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const {app, BrowserWindow, ipcMain} = electron;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
 
 let mainWindow;
+let otherWindow;
 
-require("update-electron-app")({
-  repo: "kitze/react-electron-example",
-  updateInterval: "1 hour"
-});
-
-function createWindow() {
+app.on("ready", () => {
   mainWindow = new BrowserWindow({ width: 900, height: 680 });
   mainWindow.loadURL(
     isDev
@@ -20,9 +15,7 @@ function createWindow() {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
   mainWindow.on("closed", () => (mainWindow = null));
-}
-
-app.on("ready", createWindow);
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -35,3 +28,21 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+let filterContent = "";
+ipcMain.on("filter:send", (event, data) => {
+  otherWindow = new BrowserWindow({
+      title: `filter ${data.activeCourseName} question`,
+      parent: mainWindow,
+      modal: true
+    });
+  otherWindow.loadURL(`http://localhost:3000/filterPage`)    
+  otherWindow.on("closed", () => otherWindow = null) 
+  console.log(data)
+  filterContent = data
+})
+
+if (filterContent !== "") {
+  console.log("11111")
+  otherWindow.webContents.send("filterData:Received", filterContent)
+}

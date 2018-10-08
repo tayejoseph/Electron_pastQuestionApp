@@ -28,10 +28,14 @@ class MainPage extends React.Component {
         })
     }
     }
+    propsToFilterPage = () => {
+        this.props.history.push("/filterPage")
+    }
     render() {
+
         return (
             <div>
-            <ToolBar modeChangeHandler = {this.modeChangeHandler} toggleContentSolution = {this.toggleSolution}/>
+            <ToolBar filterPage = {this.propsToFilterPage} modeChangeHandler = {this.modeChangeHandler} toggleContentSolution = {this.toggleSolution}/>
             <div id = "mainSection">
             <SideBar1 />
             <ContentArea showSolution = {this.state.showSolution} />

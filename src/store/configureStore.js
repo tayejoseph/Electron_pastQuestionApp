@@ -5,7 +5,8 @@ import {questionReducer, filterQuestions, selectedCourseReducer} from "./../redu
 
 export default () => {
     const store = createStore(combineReducers({
-        questionData: questionReducer,
+        // questionData: questionReducer,
+        // activeQuestionData: selectedCourseReducer.activeQuestionData,
         // currentQuestion: activeQuestionReducer,
         activeCourse: selectedCourseReducer,
         filterQuestionsData: filterQuestions
