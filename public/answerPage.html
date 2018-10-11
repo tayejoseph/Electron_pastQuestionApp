@@ -1,0 +1,27 @@
+<head>
+    </head>
+    <body>
+      <div id = "container">
+          <h1>The answer page</h1>
+      </div>
+
+      <div id = "content">
+
+
+      </div>
+    
+     <script>
+            const electron = require('electron');
+            const { ipcRenderer } = electron;
+        ipcRenderer.send("start:sync");
+            console.log("sdsdksdjkdskj")
+            ipcRenderer.on("answers:received", (event, answers) => {
+                console.log(answers)
+                console.log("sdsdsds")
+                // document.querySelector("#content").innerHTML = "<p>answers</p>"       
+            })
+    
+            
+            </script>
+    </body>
+    

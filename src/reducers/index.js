@@ -1,20 +1,9 @@
-// const questionData = "";
-
-
-// export const questionReducer = (state = questionData, action) => {
-//     switch(action.type) {
-//         case "GET_QUESTIONS":
-//             return action.data
-//         default: 
-//             return state;
-//     }
-// }
-
 
 const activeQuestion = {
     activeQuestionData: {},
     activeCourseData: [],
-    uni_info: {}
+    uni_info: {},
+    answersData: [] //this take the anwers that will be shown in the answer page
 }
 export const selectedCourseReducer = (state = activeQuestion, action) => {
     switch(action.type) {
@@ -25,24 +14,21 @@ export const selectedCourseReducer = (state = activeQuestion, action) => {
                 activeCourseData: action.datas.activeCourseData,
                 uni_info: action.datas.uni_info
             }
+        case "ADD_ANSWER_DATA":
+        return {
+            ...state,
+            answersData: action.data
+        }
         default: 
             return state;
     }
 }
 
-// export const selectedCourseReducer = (state = questionData, action) => {
-//     switch(action.type) {
-//         case "SELECTED_COURSE":
-//             return action.data
-//         default: 
-//             return state;
-//     }
-// }
 
 
 const defaultFilter = {
     filterDatas: {},
-    filteredData:{}
+    filteredData:"", //this default supposed to be an empty object
 }
 export const filterQuestions = (state = defaultFilter, action) => {
     switch(action.type) {
@@ -63,7 +49,7 @@ export const filterQuestions = (state = defaultFilter, action) => {
             console.log("cleared")
             return {
                 ...state,
-                filteredData: {}
+                filteredData: ""
             }
         default: 
             return state;

@@ -11,15 +11,12 @@ import unis from "./uni_api2";
 class SideBar1 extends React.Component {
     constructor(props) {
         super(props);
-        this.state = []
     }
     onCourseHandler(uni_info, courses, list) {
-        console.log(courses)
         if(list.classList.contains("active") && list.querySelector("ol")){
             list.removeChild(list.querySelector("ol"));
         } else {
         list.className = "active"
-        console.dir(list)
         const ul = document.createElement('ol')
         const uni_courses = courses.map((course) => {
             const a = document.createElement('a')
@@ -31,7 +28,6 @@ class SideBar1 extends React.Component {
                 courseTitle: `${course.title}`
             }
             a.onclick = () => {this.onYearHandler(uni_info, courseInfo, course, li)}
-            console.log(course.past_questions)
             // this.props.selectedCourse(course) //this active/update the active course store
             a.appendChild(text)
             li.appendChild(a);
@@ -45,16 +41,13 @@ class SideBar1 extends React.Component {
             list.removeChild(list.querySelector("ol"));
         } else {
         list.className = "active"
-        console.dir(list)
         const ul = document.createElement('ol');
         const currentQuestion = {
             ...courseInfo,
             questionData : "",
             year: ""
         };
-        console.log(activeCourseData)
         activeCourseData.past_questions.map((question) => {
-            console.log(question)
             currentQuestion.questionData = question.question_data;
             currentQuestion.year = question.year;
             const a = document.createElement('a')
@@ -76,7 +69,6 @@ class SideBar1 extends React.Component {
         list.removeChild(list.querySelector("ol"));
     } else {
     list.className = "active"
-    console.dir(list)
     const ul = document.createElement('ol')
     
     currentQuestion.questionData.map((question) => {
@@ -90,16 +82,16 @@ class SideBar1 extends React.Component {
         const text = document.createTextNode(question.header.exam);
       
         a.onclick = () => {
-            this.props.activeCourse_Question(uni_info, activeQuestionData, activeCourseData) //this is used to add questions to the contentAreaSection
-            this.props.clearFilteredQuestion() //this is used to clear the filtered question when ever a question to be appeared to the screen is clicked
+             //this is used to clear the filtered question when ever a question to be appeared to the screen is clicked
+                //this first check if their are any filtered data in the state
+             this.props.filteredData ? this.props.clearFilteredQuestion() : ""
+             this.props.activeCourse_Question(uni_info, activeQuestionData, activeCourseData) //this is used to add questions to the contentAreaSection
         }
         a.appendChild(text)
         li.appendChild(a);
         ul.appendChild(li)
         list.appendChild(ul);
     })
-    console.log(currentQuestion)
-    console.log(activeCourseData)
     }     
     }
     setQuestionData(data) {
@@ -108,7 +100,6 @@ class SideBar1 extends React.Component {
     componentDidMount() {
         const list = document.querySelector("#downloadedUni")
         const schools = unis.map((university) => {
-            console.log(university)
             const uni_info = {
                 "uniName": university.name,
                 "uniTitle": university.title,
@@ -119,7 +110,6 @@ class SideBar1 extends React.Component {
             const li = document.createElement("li")
             const text = document.createTextNode(university.name);
             a.onclick = () => {this.onCourseHandler(uni_info, university.courses, li)}
-            console.log(university.courses)
             a.appendChild(text)
             li.appendChild(a);
             list.appendChild(li);
@@ -136,10 +126,14 @@ class SideBar1 extends React.Component {
     }
 }
 
+const mapStateToProps = (state, props) => ({
+    filteredData: state.filterQuestionsData.filteredData,
+})
+
 const mapDispatchToProps = (dispatch, props) => ({
     clearFilteredQuestion: () => dispatch(clearFilteredQuestion()),
     // currentQuestion : (year, data, course) => dispatch(activeQuestion({course, year, data})),
     activeCourse_Question: (uni_info, activeQuestionData, activeCourseData) => dispatch(activeCourse({uni_info, activeQuestionData, activeCourseData}))
 })
 
-export default connect(null, mapDispatchToProps)(SideBar1);
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar1);

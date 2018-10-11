@@ -5,7 +5,21 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 
 let mainWindow;
-let otherWindow;
+let subWindow;
+
+console.log(mainWindow)
+
+if (isDev) {
+  installExtension = require("electron-devtools-installer");
+}
+
+const installExtensions = () => {
+  installExtension["default"](installExtension["REDUX_DEVTOOLS"])
+  installExtension["default"](installExtension["REACT_DEVELOPER_TOOLS"])
+}
+
+if (isDev) installExtensions()
+
 
 app.on("ready", () => {
   mainWindow = new BrowserWindow({ width: 900, height: 680 });
@@ -14,6 +28,7 @@ app.on("ready", () => {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
   mainWindow.on("closed", () => (mainWindow = null));
 });
 
@@ -23,26 +38,69 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
 
-let filterContent = "";
-ipcMain.on("filter:send", (event, data) => {
-  otherWindow = new BrowserWindow({
-      title: `filter ${data.activeCourseName} question`,
-      parent: mainWindow,
-      modal: true
-    });
-  otherWindow.loadURL(`http://localhost:3000/filterPage`)    
-  otherWindow.on("closed", () => otherWindow = null) 
-  console.log(data)
-  filterContent = data
+
+
+const filterSubWindow = (data) => {
+  subWindow = new BrowserWindow({
+    title: `filter ${data.activeCourseName} question`,
+    parent: mainWindow
+    // ,
+    // modal: true
+  });
+
+subWindow.loadURL(`http://localhost:3000/filterPage`);  
+subWindow.on("closed", () => subWindow = null) 
+}
+
+ipcMain.on("filter:open", (events, data) => {
+  filterSubWindow(data);
+    ipcMain.on("sync:datas", (event) => {
+      event.sender.send("filter:data", data)
+    }
+)})
+
+ipcMain.on("filteredData:send", (event, data) => {
+  subWindow.close();
+  mainWindow.webContents.send("filteredData:received", data)
 })
 
-if (filterContent !== "") {
-  console.log("11111")
-  otherWindow.webContents.send("filterData:Received", filterContent)
-}
+ipcMain.on("close:window", () => subWindow.close())
+
+
+
+//U NEED TO CREATE ONLY ONE FUNC THAT CREATES A SUB WINDOW
+
+const answerSubWindow = (data) => {
+  subWindow = new BrowserWindow ({
+    title: "view Answers",
+    parent: mainWindow
+ });
+//  subWindow.loadURL(`file://${__dirname}/answerPage.html`)
+ subWindow.loadURL(`http://localhost:3000/filterPage`)
+} 
+
+ipcMain.on("answer:open", (event, data) => {
+  console.log(data)
+  answerSubWindow(data)
+  ipcMain.on("sync:answer", (event) => {
+      event.sender.send(data)
+  })
+  
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,17 +1,15 @@
-import {createStore, combineReducers, applyMiddleware} from "redux"
+import {createStore, combineReducers, applyMiddleware, compose} from "redux"
 import thunk from "redux-thunk";
-import {questionReducer, filterQuestions, selectedCourseReducer} from "./../reducers/index";
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ //|| compose;
+import {filterQuestions, selectedCourseReducer} from "./../reducers/index";
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default () => {
     const store = createStore(combineReducers({
-        // questionData: questionReducer,
-        // activeQuestionData: selectedCourseReducer.activeQuestionData,
-        // currentQuestion: activeQuestionReducer,
         activeCourse: selectedCourseReducer,
         filterQuestionsData: filterQuestions
-    }), applyMiddleware(thunk))
-    //  composeEnhancers(applyMiddleware(thunk)))
+    }), 
+     composeEnhancers(applyMiddleware(thunk)))
     return  store;
 };
 

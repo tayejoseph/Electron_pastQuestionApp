@@ -1,14 +1,18 @@
 import React from "react";
 import {connect} from "react-redux";
-import {addFilteredData} from "./../actions/contentArea";
+import {addfilterData_ipc} from "./../actions/contentArea";
+const { ipcRenderer } = window.require('electron');
 
 class filterPage extends React.Component {
     constructor(props) {
         super(props);
+        ipcRenderer.send("sync:datas") //this will set the automatic sync of the page with electron
+
         this.state = {
             checkedTopics: [],
             checkedQuestions: []
         }
+        // ipcRenderer.send("filterData:send")
     }
     takeMeBack = () => {
         this.props.history.push("/")
@@ -39,13 +43,13 @@ class filterPage extends React.Component {
         })
     }
     filterQuestions = () => {
-        const filteredQuestions = {
-            courseName: this.props.filterDatas.activeCourseName,
-            filteredQuestion: []
-        };
+        const filteredData = {
+            filteredTopics: this.state.checkedTopics,
+            filteredQuestions: []
+        }
        this.state.checkedQuestions.map((paper) => {
            const year_Semester = paper.split(" ");
-           this.props.filterDatas.activeCourseData.past_questions.map((questionPaper) => {
+           this.state.filterDatas.activeCourseData.past_questions.map((questionPaper) => {
             console.log(questionPaper)
             if(questionPaper.year === year_Semester[0]){
             questionPaper.question_data.map((questionWrapper) => {
@@ -53,7 +57,7 @@ class filterPage extends React.Component {
                     this.state.checkedTopics.map((topic) => {
                      questionWrapper.questions.map((questionItem) => {
                          if(topic === questionItem.topic) {
-                             filteredQuestions.filteredQuestion.push({
+                            filteredData.filteredQuestions.push({
                                  questionData: questionItem,
                                  semester_year : paper   
                              }) 
@@ -67,22 +71,37 @@ class filterPage extends React.Component {
            })
        })
 
-       //U NEED TO MAKE A WAY THAT IF THE USER DO NOT CHECK ANYTHING THEN THE FILTERBTN WILL NOT WORK
-        console.log(this.state.checkedTopics)
-        
-        this.props.addFilteredData(filteredQuestions)
+
+    if(filteredData.filteredTopics.length > 1 && filteredData.filteredQuestions.length > 1) {
+        //this will prevent the person for clicked the filter when nothing is checked
+        addfilterData_ipc(filteredData)
+        }
+        // addFilteredData(filteredQuestions)
         console.log(this.props.gg)
-        console.log(filteredQuestions)
+        console.log(filteredData)
         console.log(this.props.gg)
-        this.props.history.push("/")
+        // this.props.history.push("/")
         
     }
-
-
+    closeWindow () {
+        console.log("close me")
+        ipcRenderer.send("close:window")
+    }
+    componentWillMount() {
+        ipcRenderer.on("filter:data", (event, data) => {
+            console.log(data)
+            this.setState({
+                filterDatas: data
+            })
+        })
+    }
     render () {
+
+        let filterPageContent;
+        if(this.state.filterDatas) {
         // this.takeMeBack()
-        console.log(this.props.filterDatas)
-        const {activeCourseName, activeCourseData} = this.props.filterDatas
+        const {activeCourseName, activeCourseData} = this.state.filterDatas
+        console.log(activeCourseData)
         let Topics = [];
         let courseTopic;
         let questionYear;
@@ -125,8 +144,7 @@ class filterPage extends React.Component {
                 </ol>
             </div>
         )
-     
-        return (
+         filterPageContent = (
             <div>
                 <h1>Filter Question</h1>
                 <h2>{activeCourseName} Topics</h2> 
@@ -134,19 +152,24 @@ class filterPage extends React.Component {
                 <h2>{activeCourseName} question Year</h2>
                 {questionYear}
                 <button onClick = {this.filterQuestions}>filter</button>
-                <button onClick = {this.takeMeBack}>Cancel</button>
+                <button onClick = {this.closeWindow}>Cancel</button>
             </div>
+         )           
+    } else {
+        filterPageContent = ""
+    }
+    
+        return (
+           <div>
+               {filterPageContent}
+           </div>
         )
     }
 }
 
-const mapStateToProps = (state, props) => ({
-    filterDatas: state.filterQuestionsData.filterDatas,
-    gg: state.filterQuestionsData
-});
-
 const mapDispatchToProps = (dispatch, props) => ({
-    addFilteredData: (data) => dispatch(addFilteredData(data))
+    // addFilteredData: (data) => dispatch(addFilteredData(data))
 })
+export default connect(null, mapDispatchToProps)(filterPage)
 
-export default connect(mapStateToProps, mapDispatchToProps)(filterPage)
+// export default connect()(filterPage);

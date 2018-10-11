@@ -1,4 +1,4 @@
-// const { ipcRenderer } = window.require('electron')
+const { ipcRenderer } = window.require('electron')
 
 export const getQuestionData = (data) => ({
     type: "GET_QUESTIONS",
@@ -10,23 +10,21 @@ export const activeCourse = (datas) => ({
     datas
 })
 
-// export const addVideos = videos => dispatch => {
-//     ipcRenderer.send('videos:added', videos);
-//     ipcRenderer.on('metadata:complete', (event, videosWithData) => {
-//       dispatch({ type: ADD_VIDEOS, payload: videosWithData });
-//     });
-//   };
-// l
-// // let datas = "asdaddada"
-// export const getFilterData = data => {
-//         ipcRenderer.send("filter:send", data);
-// }           
+export const addAnswersData = (data) => ({
+    type: "ADD_ANSWER_DATA",
+    data
+})
+
+// export const sendFilterData_ipc = (data) => {
+//     ipcRenderer.send("filterData:send", data)
+// }
+
+export const openFilterWindow = (data) => {
+    ipcRenderer.send("filter:send", data)
+}
 
 
-// // export const getElectronData = () => {
-// ipcRenderer.on("filterData:Received", (event, filterData) => {
-//     console.log(filterData)
-// });
+
 
 export const clearFilteredQuestion = (data) => ({
     type: "CLEAR_FILTER_QUESTION"
@@ -37,7 +35,34 @@ export const addFilterData = (datas) => ({
     datas
 })
 
-export const addFilteredData = (datas) => ({
+
+export const addFilteredData = datas => ({
     type: "ADD_FILTERED_QUESTIONS",
     datas
 })
+ 
+
+export const addfilterData_ipc = (data) => {
+ipcRenderer.send("filteredData:send", data)
+}
+
+// export const convertVideos = videos => dispatch => {
+//     ipcRenderer.send('conversion:start', videos);
+  
+//     ipcRenderer.on('conversion:end', (event, { video, outputPath }) => {
+//       dispatch({ type: VIDEO_COMPLETE, payload: { ...video, outputPath } });
+//     });
+// export const receiveFilterData_ipc = () => {
+// let filteredData;
+// ipcRenderer.on("filteredData:received", (event, data) => {
+//     filteredData = data
+// });
+
+// if(filteredData) {
+//     console.log("sdsff")
+//     addFilteredData(filteredData)
+// }
+
+// )
+// }
+

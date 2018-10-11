@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
-import {addFilterData} from "./../actions/contentArea";
+import {addFilterData, openFilterWindow} from "./../actions/contentArea";
+const { ipcRenderer } = window.require('electron')
 
 class ToolBar extends React.Component {
     constructor(props) {
@@ -11,6 +12,8 @@ class ToolBar extends React.Component {
         }
     }
     answerClickHandler = () => {
+        console.log("sdsds")
+        ipcRenderer.send("answer:open", this.props.activeCourse.answersData)
         // console.log(this.state.answers)
     //I am going to send the questions answers to the electron side of the app so that i can use it to update the propup window for answers
     }
@@ -23,11 +26,12 @@ class ToolBar extends React.Component {
             activeCourseName: courseName,
             activeQuestionYear: year
         } //this is are all the data that we need to send to the filterSection(course datas)
-       
-       this.props.addFilterData(courseData);
-       this.props.filterPage()
-        
-        // console.log(this.props.filter)
+
+        this.props.addFilterData(courseData);
+       ipcRenderer.send("filter:open", courseData)
+
+    //    this.props.openFilterWindow(courseData)
+       // console.log(this.props.filter)
      
     }
     disableToolBarBtn = (e) => {
@@ -97,7 +101,8 @@ class ToolBar extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => ({
-    addFilterData: (data) => dispatch(addFilterData(data))
+    addFilterData: (data) => dispatch(addFilterData(data)),
+    // openFilterWindow: (data) => dispatch(openFilterWindow(data))
 })
 const mapStateToProps = (state, props) => ({
     activeCourse: state.activeCourse,

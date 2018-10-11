@@ -4,7 +4,7 @@ import {Router, Route, Switch} from "react-router";
 import createHistory from "history/createBrowserHistory"; 
 import MainPage from "../container/MainPage";
 import filterPage from "../container/filterPage";
-
+import AnswerPage from "../container/AnswerPage";
 
 export const history = createHistory();
 
@@ -14,6 +14,7 @@ const AppRouter = (props) => {
         <Switch>
             <Route path = "/" component = {MainPage} exact = {true} />     
             <Route path = "/filterPage" component = {filterPage} />     
+            <Route path = "/answerPage" component = {AnswerPage} />
         </Switch>
         </Router>
 
