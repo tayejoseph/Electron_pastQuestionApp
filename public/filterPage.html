@@ -1,26 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <style>
- 
-    </style>
-  </head>
-  <body>
-    
-   <h1>Filter Page</h1>
-   <script>
-    const electron = require('electron');
-    const { ipcRenderer } = electron;
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script>
+const React = require("react");
+const ReactDOM = require("react-dom")
+const Babel = require("babel-standalone")  
+const { ipcRenderer } = require("electron");
+</script>
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
 
-    // let filterData = ""
-    ipcRenderer.on("filtered:data", (event, data) => {
-      console.log(data)
-    })
-    // console.log(filterData)
-      </script>
-  </body>
+
+</head>
+<body>
+
+<h1>Filter Page</h1>
+<div id = "root">
+
+</div>
+
+
+<script type = "text/babel">
+
+class FilterPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            checkedTopics: [],
+            checkedQuestions: []
+        }
+        this.closeWindow = this.closeWindow.bind(this);
+        this.filterQuestions = this.filterQuestions.bind(this)
+    }
+    getUniqueArray = (array) => {
+        const unique = [
+            ...new Set(array)
+        ] //this is used in removing the duplicate topic in the array 
+        return unique
+    }
+    topicCheckHandler = (e) => {
+        console.log(e.target.value)
+        this.setState({
+            checkedTopics: [
+                ...this.state.checkedTopics,
+                   e.target.value
+            ]
+        })
+    }
+    questionHandler = (e) => {
+        console.log(e.target.value)
+        this.setState({
+            checkedQuestions: [
+                ...this.state.checkedQuestions,
+                   e.target.value
+            ]
+        })
+    }
+    filterQuestions = () => {
+        let inputs = document.getElementsByTagName("input")
+      
+        const filteredData = {
+            filteredTopics: this.state.checkedTopics,
+            filteredQuestions: []
+        }
+       this.state.checkedQuestions.map((paper) => {
+           const year_Semester = paper.split(" ");
+           this.state.filterDatas.activeCourseData.past_questions.map((questionPaper) => {
+            console.log(questionPaper)
+            if(questionPaper.year === year_Semester[0]){
+            questionPaper.question_data.map((questionWrapper) => {
+                if(questionWrapper.header.semester === year_Semester[1]) {
+                    this.state.checkedTopics.map((topic) => {
+                     questionWrapper.questions.map((questionItem) => {
+                         if(topic === questionItem.topic) {
+                            filteredData.filteredQuestions.push({
+                                 questionData: questionItem,
+                                 semester_year : paper   
+                             }) 
+                        }
+                     })
+                    
+                    })
+                }
+            })
+        }
+           })
+       })
+
+
+    if (filteredData.filteredTopics.length > 0 && filteredData.filteredQuestions.length > 0) {
+        console.log(filteredData)
+          Array.from(inputs, (input) => {
+            input.checked = false
+        })
+        //this will prevent the person for clicked the filter when nothing is checked
+        ipcRenderer.send("filtered:questions", filteredData);
+        ipcRenderer.send("close:window")
+        this.setState({
+            checkedQuestions: [],
+            checkedTopics: []
+        })  
+        filteredData.filteredTopics = [];
+        filteredData.filteredQuestions = [];      
+        }
+    }
+    closeWindow () {
+        //u need to work very well in the unchecking th check btn its not wrking fine
+        let inputs = document.getElementsByTagName("input")
+         this.setState({
+            checkedQuestions: [],
+            checkedTopics: []
+        })
+        Array.from(inputs, (input) => {
+            input.checked = false
+        })
+        ipcRenderer.send("close:window")
+    }
+    componentWillMount() {
+        ipcRenderer.on("filter:datas", (event, data) => {
+            console.log(data)
+            this.setState({
+                filterDatas: data
+            })
+        })
+    }
+  
+    
+    render () {
+
+        let filterPageContent;
+        if(this.state.filterDatas) {
+        const {activeCourseName, activeCourseData} = this.state.filterDatas
+        console.log(activeCourseData)
+        let Topics = [];
+        let courseTopic;
+        let questionYear;
+        let questionPresentDatas = []; //this is what will show in the filter section of the page year section
+        console.log(activeCourseData);
+        activeCourseData.past_questions.map((course) => {
+            course.question_data.map((questionCover) => {
+                questionPresentDatas.push({
+                    "question_year": `${course.year}`,
+                    "course": `${activeCourseName}`,
+                    "paperTitle": `${questionCover.header.semester}`
+                })
+               questionCover.questions.map((question) => {
+                   Topics.push(question.topic)
+               })
+            })
+        
+        
+        });
+        console.log(questionPresentDatas) //This are the year data we need to use for the filter page 
+        Topics = this.getUniqueArray(Topics)
+        
+        courseTopic = (
+            <div>
+                <ol>
+                    {Topics.map((topic) => (
+                        <li key = {topic}><input type = "checkbox" onClick = {this.topicCheckHandler} value = {topic}/>{topic}</li>
+                    ))}
+                </ol>
+            </div>
+        )
+        questionYear = (
+            <div>
+                <ol>
+                    {
+                        questionPresentDatas.map((question, index) => (
+                            <li key = {index} ><input type = "checkbox" onClick = {this.questionHandler} value = {`${question.question_year} ${question.paperTitle}`} />{question.question_year} {question.course} {question.paperTitle} semester</li>
+                        ))
+                    }
+                </ol>
+            </div>
+        )
+         filterPageContent = (
+            <div>
+                <h1>Filter Question</h1>
+                <h2>{activeCourseName} Topics</h2> 
+                {courseTopic}
+                <h2>{activeCourseName} question Year</h2>
+                {questionYear}
+                <button onClick = {this.filterQuestions}>filter</button>
+                <button onClick = {this.closeWindow}>Cancel</button>
+            </div>
+         )           
+    } else {
+        filterPageContent = ""
+    }
+    
+        return (
+           <div>
+               {filterPageContent}
+           </div>
+        )
+    }
+}
+
+ReactDOM.render(<FilterPage />, document.getElementById("root"))
+</script>
+</body>
 </html>
+
+

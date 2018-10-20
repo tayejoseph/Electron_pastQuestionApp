@@ -32,14 +32,14 @@ const unis = [
                                     {
                                         "topic": "indices",
                                         "num": "1",
-                                        "question": "work is the derivative of 2",
+                                        "question": "not working how",
                                         "options": [
                                             {"a": "3"},
                                             {"b" : "2"},
                                             {"d": "4"},
                                             {"c": "56"},
                                         ],
-                                        "answer": "a",
+                                        "answer": "g",
                                         "solution": "aksksjdjkjdsfkjfksj" 
                                     },
                                     {
@@ -52,14 +52,14 @@ const unis = [
                                             {"d": "4"},
                                             {"c": "56"},
                                         ],
-                                        "answer": "a",
+                                        "answer": "ab",
                                         "solution": "aksksjdjkjdsfkjfksj" 
                                         
                                     },
                                     {
                                         "topic": "indices2",
                                         "num": "3",
-                                        "question": "szdfsfsfdsdsfdsdf",
+                                        "question": "I am still trying to get it right",
                                         "options": [
                                             {"a": "3"},
                                             {"b" : "2"},
@@ -106,7 +106,7 @@ const unis = [
                                                     {"d": "4"},
                                                     {"c": "56"},
                                                 ],
-                                                "answer": "a",
+                                                "answer": "cc",
                                                 "solution": "aksksjdjkjdsfkjfksj" 
                                             },
                                             {
@@ -140,14 +140,14 @@ const unis = [
                                             {
                                                 "topic": "algebra",
                                                 "num": "4",
-                                                "question": "good boy",
+                                                "question": "good boy2",
                                                 "options": [
                                                     {"a": "3"},
                                                     {"b" : "2"},
                                                     {"d": "4"},
                                                     {"c": "56"},
                                                 ],
-                                                "answer": "a",
+                                                "answer": "aaaaaaaaa",
                                                 "solution": "" 
                                                 
                                             }
@@ -465,7 +465,7 @@ const unis = [
                                     {
                                         "topic": "indices",
                                         "num": "1",
-                                        "question": "work is the derivative of 2",
+                                        "question": "what is the derivative of 2",
                                         "options": [
                                             {"a": "3"},
                                             {"b" : "2"},
@@ -602,7 +602,7 @@ const unis = [
 
     {
         "name": "UST",
-        "title": "OBAFEMI AWOLOWO UNIVERSITY",
+        "title": "UNIVERSITY OF SCIENCE AND TECHNOLOGY",
         "location": {
             "country": "Nigeria",
             "state": "ILE IFE"
@@ -748,7 +748,7 @@ const unis = [
                                                     {"d": "4"},
                                                     {"c": "56"},
                                                 ],
-                                                "answer": "a",
+                                                "answer": "n",
                                                 "solution": "" 
                                                 
                                             }

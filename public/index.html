@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
+    <link rel = "stylesheet" href = "./min/bootstrap.min.css">
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -20,89 +21,43 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <!-- <link href = "%PUBLIC_URL%/asssets/css/bootstrap.min.css" rel="stylesheet"/> -->
-    <style>
-  body {
-    margin: 0;
-}
-#toolBar ul {
-    list-style-type: none;
-    margin: 0;
-    overflow: hidden;
-    background-color: #333333;
-    position: fixed;
-    padding: 10px;
-    top: 0;
-    width: 100%;
-}
-
-#toolBar li {
-    float: left;
-}
-
-#toolBar li button {
-    display: block;
-    text-align: center;
-    padding: 8px 16px;
-    text-decoration: none;
-}
-
-#toolBar li button:hover:not(.active) {
-    background-color: #111;
-}
-
-#toolBar .active {
-    background-color: #4CAF50;
-}
-#mainSection {
-  margin-top:54px;
-}
-#sideBar1 ul {
-    list-style-type: none;
-    margin: 0;
+  <style>
+  .Column {
+    background: grey;
+    height: 100%;
     padding: 0;
-    float: left;
-    width: 270px;
-    background-color: #f1f1f1;
-    position: fixed;
+  }
+  #NavSideBar {
+    background: green;
     height: 100%;
     overflow: auto;
-}
-
-#sideBar1 li a {
-    display: block;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-}
-
-#sideBar1 li a.active {
-    background-color: #4CAF50;
-    color: white;
-    background: green;
-}
-
-#sideBar1 li a:hover:not(.active) {
-    background-color: #555;
-    background: red;
-    color: white;
-}
-
-#contentArea {
-  box-sizing: border-box;
-  margin: 0;
-  margin-left:270px;
-  padding:1px 16px;
-  height:1000px;
-  background: #4CAF50;
-}
-
-    </style>
+    overflow-x: hidden
+  }
+  #NavSideBar li {
+    list-style: none
+  }
+  #ContentArea, #WelcomePage, #DownloadPage, #FeedBackPage, #UploadPage {
+    padding: 20px;
+    background: blue;
+    width: 100%;
+    height: 100%
+  }
+  #DownloadPage, #FeedBackPage, #UploadPage {
+  background: red;
+  padding: 20px;
+   height: calc(100vh - 130px)
+  }
+  #BottomSection {
+    background: black;
+    height: 80px;
+  }
+  </style>
   </head>
   <body>
     <!-- <noscript>
       You need to enable JavaScript to run this app.
     </noscript> -->
-    <div class = "container-fluid" id="root"></div>
+    <div id = "root"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

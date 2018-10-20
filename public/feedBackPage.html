@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script>
+const { ipcRenderer } = require("electron");
+const React = require("react");
+const ReactDOM = require("react-dom")
+const babel = require("babel-standalone")  
+</script>
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+<style>
+
+</style>
+</head>
+<body>
+
+<div id = "root">
+
+</div>
+
+<script type = "text/babel">
+
+class FeedBackPage extends React.Component {
+    render () {
+        return (
+            <div>
+            <p>This is the FeedBackPage page</p>
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(<FeedBackPage />, document.getElementById("root"))
+</script>
+</body>
+</html>
+
+

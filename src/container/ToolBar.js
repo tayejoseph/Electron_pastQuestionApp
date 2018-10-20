@@ -1,112 +1,53 @@
 import React from "react";
-import {connect} from "react-redux";
-import {addFilterData, openFilterWindow} from "./../actions/contentArea";
-const { ipcRenderer } = window.require('electron')
+import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, ButtonToolbar, FormGroup, FormControl} from "react-bootstrap";
+
 
 class ToolBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            disable: true, //this will be used to enable the button when ever the click in a question,
-            answers: ""
-        }
+constructor(props) {
+    super(props);
+    console.log(props.enableBtn)
+}
+openUploadHandler = () => (
+    this.props.showUpload()
+)
+feedBackHandler = () => (
+    this.props.showFeedBack()
+)
+downloadHandler = () => (
+    this.props.showDownload()
+)
+modalClickHandler = (e) => {
+    if(e.target.innerHTML === "Answer") {
+        this.props.handleAnswerModal()
+    } else {
+        this.props.handleFilterModal()
     }
-    answerClickHandler = () => {
-        console.log("sdsds")
-        ipcRenderer.send("answer:open", this.props.activeCourse.answersData)
-        // console.log(this.state.answers)
-    //I am going to send the questions answers to the electron side of the app so that i can use it to update the propup window for answers
-    }
-    filterQuestionHandler = () => {
-        // console.log(this.props.activeCourse);
-        const { activeCourseData, activeQuestionData} = this.props.activeCourse;
-        const {courseName, year} = activeQuestionData;
-        const courseData = {
-            activeCourseData,
-            activeCourseName: courseName,
-            activeQuestionYear: year
-        } //this is are all the data that we need to send to the filterSection(course datas)
-
-        this.props.addFilterData(courseData);
-       ipcRenderer.send("filter:open", courseData)
-
-    //    this.props.openFilterWindow(courseData)
-       // console.log(this.props.filter)
-     
-    }
-    disableToolBarBtn = (e) => {
-        if(e.target.value === "Exam"){
-            this.setState({
-                disable: true
-            });
-            this.props.modeChangeHandler(false)
-        } else {
-            this.setState({
-                disable: false
-            });
-            this.props.modeChangeHandler(true)       
-         }
-    }
-    componentWillReceiveProps (newProps) {
-
-        //this is used to return the mode back to text mode when ever the user change/click to another question from exam mode
-        document.querySelector("select").options.selectedIndex = 0;
-        console.log(newProps)
-        //this will only enable the show solution btn only if the questions are supplied
-        if (!newProps.activeCourse.activeQuestionData.questions) {
-            console.log(this.props.disableToolBar)
-            this.setState({
-                disable: false
-            })
-            console.log("addsd")
-        } 
-        else {
-            const answers = []
-            newProps.activeQuestion.questions.map((question, index) => {
-                answers.push({
-                    "No.":  index+1,
-                    "answer" : question.answer
-                })
-            })
-            this.setState({
-                disable: false,
-                answers: answers
-            })
-            console.log(answers)
-        } 
-    }
-    render () {
-        //the anwer btn when click will show like a page with the question no and also the answer
-        //the solution btn when clicked will enable the answer and solution under each answer sections in the question
-        return (
-            <div id = "toolBar">
-            <ul>
-            <li><button onClick = {this.answerClickHandler} disabled = {this.state.disable}>Answer</button></li>
-            <li><button onClick = {this.props.toggleContentSolution} disabled = {this.state.disable}>Solution</button></li>
-            <li><button onClick = {this.filterQuestionHandler} disabled = {this.state.disable}>Filter Question</button></li>
-            <li>
-            <select onChange = {this.disableToolBarBtn}>
-            <option value="Test">Test Mode</option>
-            <option value="Exam">Exam Mode</option>
-            </select>
-            </li>
-            <li><button disabled = {this.state.disable}>Download</button></li>
-            <li><button disabled = {this.state.disable}>Upload</button></li>
-            <li id = "feedBack"><button disabled = {this.state.disable} >FeedBack</button></li>
-            </ul>
-            </div>
-        )
-    }
-    
+}
+modeChangeHandler = (e) => {
+    this.props.handleModeChange(e.target.value)
 }
 
-const mapDispatchToProps = (dispatch, props) => ({
-    addFilterData: (data) => dispatch(addFilterData(data)),
-    // openFilterWindow: (data) => dispatch(openFilterWindow(data))
-})
-const mapStateToProps = (state, props) => ({
-    activeCourse: state.activeCourse,
-    filter: state.filterQuestionsData
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToolBar);
+render () {
+    return (
+            <Navbar fixedTop>  
+            <Navbar.Form>
+                <Button onClick = {this.modalClickHandler} disabled = {this.props.enableBtn}>Answer</Button>
+                <Button onClick = {this.props.toggleContentSolution} disabled = {this.props.enableBtn}>Solution</Button>
+                <Button onClick = {this.modalClickHandler} disabled = {this.props.enableBtn}>Filter</Button>
+                <select disabled = {this.props.enableModeBtn}
+                onChange = {this.modeChangeHandler} defaultValue = "Test">
+                <option value="Test">Test Mode</option>
+                <option value="Exam">Exam Mode</option>
+                </select>
+                <Button onClick = {this.timerClick}>Timer</Button>
+                <Button onClick = {this.downloadHandler}>Download</Button>
+                <Button onClick = {this.openUploadHandler}>Upload</Button>
+                <Button onClick = {this.feedBackHandler}>FeedBack</Button>
+            </Navbar.Form>
+            </Navbar>
+    )
+}
+}
+
+export default ToolBar;

@@ -1,27 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    </head>
-    <body>
-      <div id = "container">
-          <h1>The answer page</h1>
-      </div>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script>
+const { ipcRenderer } = require("electron");
+const React = require("react");
+const ReactDOM = require("react-dom")
+const babel = require("babel-standalone")  
+// require('import-export'); this is for the library i installed note i must configure babel globally
+</script>
+<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+</head>
+<body>
 
-      <div id = "content">
+<div id = "root">
 
+</div>
 
-      </div>
-    
-     <script>
-            const electron = require('electron');
-            const { ipcRenderer } = electron;
-        ipcRenderer.send("start:sync");
-            console.log("sdsdksdjkdskj")
-            ipcRenderer.on("answers:received", (event, answers) => {
-                console.log(answers)
-                console.log("sdsdsds")
-                // document.querySelector("#content").innerHTML = "<p>answers</p>"       
+<script type = "text/babel">
+
+class AnswerPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            answers: [],
+            course_info: {}
+        }
+    }
+    componentWillMount() {
+        ipcRenderer.on("answer:datas", (event, data) => {
+            console.log(data)
+            this.setState({
+                answers: data.answer.answersData,
+                topics: data.answer.topics,
+                course_info: data.course_info
             })
-    
-            
-            </script>
-    </body>
-    
+        })
+    }
+    render () {
+        console.log(this.state.answers, "shhhhhhhh")
+        const {uniTitle, semester, exam, courseName, courseDepartment, courseTitle, year} = this.state.course_info;
+        console.log(this.state.answers)
+        let content = (
+            <div>
+            <hgroup>
+            <h2>{uniTitle}</h2>
+            <h2>{courseDepartment}</h2>
+            {this.state.answers.topics ? <h2>Filtered Questions for {courseName}</h2> : "" }
+            <h2>{courseName} - {courseTitle}</h2>
+            {this.state.topics ? this.state.topics.length < 1 ? <h2>{year} {semester} {exam} Answers</h2> : "" : ""}
+            {console.log(this.state.topics, "111111111")}
+            {this.state.topics ? this.state.topics.length >= 1 ? (<h3>Filtered Topics: {
+                this.state.topics.map((topic, index) => (
+                    <span key = {index}>
+                    {
+                    (this.state.topics[this.state.topics.length -1] === topic) ? (
+                        <span>{topic} .</span>
+                    ) : (
+                        <span>{topic}, </span>
+                    )
+                    }
+                </span>
+                ))
+            }</h3>) : "" : "" }
+            </hgroup>
+            {this.state.answers.map((answer, index) => (
+                <div key = {index}>
+                {this.state.topics ? <p>{answer.semester}</p> : "" }
+                <p><span style = {{"marginRight": "10px"}}>{answer.num}. </span>{answer.answer}</p>
+                </div>
+            ))
+            }
+            </div>
+        )
+        return (
+            <div>
+            {content}
+            </div>
+            )
+    }
+}
+
+ReactDOM.render(<AnswerPage />, document.getElementById("root"))
+</script>
+</body>
+</html>
+
+
