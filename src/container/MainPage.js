@@ -131,6 +131,10 @@ handleFilterModalHide = () => {
 }
 
 render () {
+    const select = document.querySelector("select");
+    if(select && !this.state.showContentArea) {
+        select.selectedIndex = 0 //this is used to set the mode to test mode when ever content area is false/not active
+    }
     return (
         <Grid fluid>
             <Row>

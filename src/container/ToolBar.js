@@ -25,7 +25,9 @@ modalClickHandler = (e) => {
 }
 modeChangeHandler = (e) => {
     this.props.handleModeChange(e.target.value)
+//i need to set the value to test mode when ever the side bar btn is click
 }
+
 
 
 render () {

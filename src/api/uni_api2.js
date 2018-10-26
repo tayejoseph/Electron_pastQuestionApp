@@ -6,7 +6,7 @@ const unis = [
             "country": "Nigeria",
             "state": "ILE IFE"
         },
-        "logo": "",
+        "logo": `${__dirname}/OAU_logo.jpg}`,
         "uni_id": "123",
         "courses": [
             {
@@ -25,7 +25,7 @@ const unis = [
                                     "time": "2 hrs 30 mins",
                                     "questionType": "Type D",
                                     "instruction": "All phone are to be switched Off",
-                                    "semester": "Rain",
+                                    "session": "Rain",
                                     "exam": "Mid-semester Examination"
                                 },
                                 "questions": [
@@ -92,7 +92,7 @@ const unis = [
                                             "time": "2 hrs 30 mins",
                                             "questionType": "Type D",
                                             "instruction": "All phone are to be switched Off",
-                                            "semester": "Harmattan",
+                                            "session": "Harmattan",
                                             "exam": "Semester Examination"
                                         },
                                         "questions": [
@@ -166,7 +166,7 @@ const unis = [
                                     "time": "2 hrs 30 mins",
                                     "questionType": "Type D",
                                     "instruction": "All phone are to be switched Off",
-                                    "semester": "Rain",
+                                    "session": "Rain",
                                     "exam": "Mid-semester Examination"
                                 },
                                 "questions": [
@@ -233,7 +233,7 @@ const unis = [
                                             "time": "2 hrs 30 mins",
                                             "questionType": "Type D",
                                             "instruction": "All phone are to be switched Off",
-                                            "semester": "Harmattan",
+                                            "session": "Harmattan",
                                             "exam": "Semester Examination"
                                         },
                                         "questions": [
@@ -317,7 +317,7 @@ const unis = [
                                     "time": "2 hrs 30 mins",
                                     "questionType": "Type D",
                                     "instruction": "All phone are to be switched Off",
-                                    "semester": "Rain",
+                                    "session": "Rain",
                                     "exam": "Mid-semester Examination"
                                 },
                                 "questions": [
@@ -384,7 +384,7 @@ const unis = [
                                             "time": "2 hrs 30 mins",
                                             "questionType": "Type D",
                                             "instruction": "All phone are to be switched Off",
-                                            "semester": "Harmattan",
+                                            "session": "Harmattan",
                                             "exam": "Semester Examination"
                                         },
                                         "questions": [
@@ -458,7 +458,7 @@ const unis = [
                                     "time": "2 hrs 30 mins",
                                     "questionType": "Type D",
                                     "instruction": "All phone are to be switched Off",
-                                    "semester": "Rain",
+                                    "session": "Rain",
                                     "exam": "Mid-semester Examination"
                                 },
                                 "questions": [
@@ -525,7 +525,7 @@ const unis = [
                                             "time": "2 hrs 30 mins",
                                             "questionType": "Type D",
                                             "instruction": "All phone are to be switched Off",
-                                            "semester": "Harmattan",
+                                            "session": "Harmattan",
                                             "exam": "Semester Examination"
                                         },
                                         "questions": [
@@ -626,7 +626,7 @@ const unis = [
                                     "time": "2 hrs 30 mins",
                                     "questionType": "Type D",
                                     "instruction": "All phone are to be switched Off",
-                                    "semester": "Rain",
+                                    "session": "Rain",
                                     "exam": "Mid-semester Examination"
                                 },
                                 "questions": [
@@ -693,7 +693,7 @@ const unis = [
                                             "time": "2 hrs 30 mins",
                                             "questionType": "Type D",
                                             "instruction": "All phone are to be switched Off",
-                                            "semester": "Harmattan",
+                                            "session": "Harmattan",
                                             "exam": "Semester Examination"
                                         },
                                         "questions": [

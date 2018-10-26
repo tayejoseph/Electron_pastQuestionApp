@@ -25,7 +25,8 @@ export const addActiveCourseTopics = (data) => ({
     data
 })
 
-export const addActiveCoureYears = (data) => ({
-    type: "ADD_ACTIVE_COURSE_YEARS",
+//this is used to add the filteredData to the page
+export const addFilteredData = (data) => ({
+    type: "ADD_FILTERED_DATAS",
     data
 })

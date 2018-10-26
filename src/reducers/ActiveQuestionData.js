@@ -1,9 +1,9 @@
 
 const activeData = {
     currentQuestionData: {},
+    filteredDatas: {},
     activeCourseDatas: { //this is my new state for my filter data so that the user can filter data from the entire course datas
         activeCourseTopics: [],
-        activeCourseYears: [],
         activeCourseData: {}
     },
     uni_info: {}
@@ -37,14 +37,10 @@ export default (state = activeData, action) => {
                     activeCourseTopics: action.data
                 }
             }
-        case "ADD_ACTIVE_COURSE_YEARS":
-        console.log(action.data)
+        case "ADD_FILTERED_DATAS":
             return {
                 ...state,
-                activeCourseDatas: {
-                    ...state.activeCourseDatas,
-                    activeCourseYears: action.data
-                }
+                filteredDatas: action.data
             }
         default:
             return state

@@ -1,4 +1,6 @@
 import React from "react";
+// import {FieldGroup} from "react-bootstrap";
+
 import Dropzone from "react-dropzone";
 
 class UploadPage extends React.Component {
@@ -73,6 +75,18 @@ class UploadPage extends React.Component {
             <div id = "UploadPage">
             <h1>sadfssadfs</h1>
             <form>
+            {/* <FieldGroup
+      id="formControlsText"
+      type="text"
+      label="Text"
+      placeholder="Enter text"
+    />
+    <FieldGroup
+      id="formControlsEmail"
+      type="email"
+      label="Email address"
+      placeholder="Enter email"
+    />
             <div className = "input-group">
                 <label>School Name:  </label>
                 <input type = "text"
@@ -115,7 +129,7 @@ class UploadPage extends React.Component {
             >
             {this.renderChildren}
             </Dropzone>
-            </div>
+            </div> */}
 
             <button onClick = {this.uploadHandler}>Upload</button>
             <button onClick = {this.cancelHandler}>Cancel</button>

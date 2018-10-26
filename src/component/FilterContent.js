@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Modal, OverlayTrigger, Button, Tooltip, Popover} from "react-bootstrap";
+import {addFilteredData} from "./../actions"
 
 class FilterContent extends React.Component {
     constructor(props) {
@@ -11,74 +12,80 @@ class FilterContent extends React.Component {
         }
     }
     topicCheckHandler = (e) => {
-        console.log(e.target.value)
+        const value = e.target.value ? e.target.value : "" //this will retain the previous value even when the it is unchecked
+        if(e.target.checked) { 
         this.setState({
             checkedTopics: [
                 ...this.state.checkedTopics,
-                   e.target.value
+                   value
             ]
         })
+    } else {
+        this.setState((prevState) => ({
+            checkedTopics: prevState.checkedTopics.filter((topics) => topics !== value) //this will remove the unchecked topic form the array
+        }))
+    }
     }
     questionCheckHandler = (e) => {
-        console.log(e.target.value)
+        const value = e.target.value ? e.target.value : ""
+        if(e.target.checked) {
         this.setState({
             checkedQuestions: [
                 ...this.state.checkedQuestions,
-                   e.target.value
+                  value
             ]
         })
+    } else {
+        this.setState((prevState) => ({
+            checkedQuestions: prevState.checkedQuestions.filter((questions) => questions !== value)
+        }))
+    }
     }
     filterQuestions = () => {
-        let inputs = document.getElementsByTagName("input")
-      
-        const filteredData = {
-            filteredTopics: this.state.checkedTopics,
-            filteredQuestions: []
-        }
-        console.log(this.state.checkedQuestions)
-       this.state.checkedQuestions.map((paper) => {
-           const year_Semester = paper.split(" ");
-           this.props.activeCourseData.past_questions.map((questionPaper) => {
-            console.log(questionPaper)
-            console.log(year_Semester[0])
-            if(questionPaper.year === year_Semester[0]){
-            questionPaper.question_data.map((questionWrapper) => {
-                console.log(year_Semester[1])
-                console.log(questionWrapper.header.semester)
-                if(questionWrapper.header.semester === year_Semester[1]) {
-                    this.state.checkedTopics.map((topic) => {
-                     questionWrapper.questions.map((questionItem) => {
-                         if(topic === questionItem.topic) {
-                            filteredData.filteredQuestions.push({
-                                 questionData: questionItem,
-                                 semester_year : paper   
-                             }) 
-                        }
-                     })
-                    
-                    })
-                }
+       const {checkedTopics, checkedQuestions} = this.state;
+    //    let inputs = document.getElementsByTagName("input") //I may need to effect this disabling the check box again
+    //    console.log(inputs)
+        if (checkedTopics.length > 0 && checkedQuestions.length > 0) {
+            const filteredQuestions = []
+            const filteredTopics = []
+        checkedQuestions.map((paper) => {
+            const year_Semester = paper.split(" ");
+            this.props.activeCourseData.past_questions.map((questionPaper) => {
+                if(questionPaper.year === year_Semester[0]){
+                questionPaper.question_data.map((questionWrapper) => {
+                    if(questionWrapper.header.session === year_Semester[1] && questionWrapper.header.exam === `${year_Semester[3]} ${year_Semester[4]}`) {
+                        checkedTopics.map((topic) => {
+                        questionWrapper.questions.map((questionItem) => {
+                            if(topic === questionItem.topic) {
+                                filteredTopics.push(topic)
+                                filteredQuestions.push({
+                                    questionData: questionItem,
+                                    semester_year : paper   
+                                }) 
+                            }
+                        })
+                        
+                        })
+                    }
+                })
+            }
             })
-        }
-           })
-       })
-
-
-    if (filteredData.filteredTopics.length > 0 && filteredData.filteredQuestions.length > 0) {
-        console.log(filteredData)
-          Array.from(inputs, (input) => {
-            input.checked = false
         })
-        //this will prevent the person for clicked the filter when nothing is checked
-        // ipcRenderer.send("filtered:questions", filteredData);
-        // ipcRenderer.send("close:window")
-        this.setState({
-            checkedQuestions: [],
-            checkedTopics: []
-        })  
-        filteredData.filteredTopics = [];
-        filteredData.filteredQuestions = [];      
-        }
+
+        //note u need to do something if the filtered question array is empty
+        //note i need to add a tool tip for all the topics so that when ever any user put the cursor on a past question he or she can have an idea of the topic that are available for that question
+            if(filteredQuestions.length > 0) { //this check if the topics picked where found in the questions picked before sending it to the state
+            this.props.addFilteredData({
+                filteredTopics: [...new Set(filteredTopics)],
+                filteredQuestions
+            })
+            this.props.handleFilterModalHide()   
+            }
+            }
+            this.setState({
+                checkedQuestions: [],
+                checkedTopics: []
+            })  
     }
     closeWindow () {
         //u need to work very well in the unchecking th check btn its not wrking fine
@@ -90,27 +97,33 @@ class FilterContent extends React.Component {
         Array.from(inputs, (input) => {
             input.checked = false
         })
-        // ipcRenderer.send("close:window")
     }
- 
     render () {
+        console.log(this.props.activeCourseData)
         let content = (
         <React.Fragment>
         <ul id = "topic_content">
+        <p>Filter Questions by Topics below</p>
         {this.props.topics.map((topic) => (
             <li><input type = "checkbox" onClick = {this.topicCheckHandler} value = {topic} />{topic}</li>   
         ))
         }
         </ul>
         <ul>
-        {this.props.questionYears.map((data) => (
-            //i need to know here to add the semester if it is rain or harmattan
-            <li><input type = "checkbox" onClick = {this.questionCheckHandler} value = {`${data.year} ${data.semester_exam}`} />{`${data.year} ${data.semester_exam}`}</li>   
+        <p>Pick the Past Questions You Want Your Filtered Questions To Come From</p>
+        {this.props.activeCourseData.past_questions.map((pastQuestions) => (
+            pastQuestions.question_data.map((pastQuestion) => (
+                <li><input type = "checkbox" onClick = {this.questionCheckHandler} value = {`${pastQuestions.year} ${pastQuestion.header.session} session ${pastQuestion.header.exam}`} />
+                {`${pastQuestions.year} ${pastQuestion.header.session} session ${ pastQuestion.header.exam}`}
+                </li>   
+
+            ))
         ))
         }
         </ul>
         </React.Fragment>
         )
+        console.log(this.props.uni_course_info)
     return (
         <Modal 
            keyboard
@@ -121,30 +134,29 @@ class FilterContent extends React.Component {
            onHide={this.props.handleFilterModalHide}
        >
        <Modal.Header closeButton>
-       <Modal.Title>Modal heading</Modal.Title>
+       <Modal.Title>
+       <img src = {this.props.uni_course_info.unilogo} alt = "oau logo" id = "uni_logo" />
+       {this.props.uni_course_info.courseDepartment}</Modal.Title>
        </Modal.Header>
        <Modal.Body>
        {content}
        </Modal.Body>
        <Modal.Footer>
-        <Button onClick = {this.filterQuestions}>Filter</Button>
+       <Button onClick = {this.filterQuestions}>Filter</Button>
        <Button onClick={this.props.handleFilterModalHide}>Close</Button>
        </Modal.Footer>
        </Modal>
         )
-        
     }
 }
 
 const mapStateToProps = (state, props) => ({
 topics: state.ActivePastQuestionDatas.activeCourseDatas.activeCourseTopics,
-questionYears: state.ActivePastQuestionDatas.activeCourseDatas.activeCourseYears,
 activeCourseData: state.ActivePastQuestionDatas.activeCourseDatas.activeCourseData
-
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-// addFilteredData : (data) => dispatch(addFilteredData(data))
+addFilteredData : (data) => dispatch(addFilteredData(data))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterContent);

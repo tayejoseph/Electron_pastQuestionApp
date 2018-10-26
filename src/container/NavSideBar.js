@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {addUni_info, addActiveCoureYears, addActiveCourseTopics, addActiveCourseData, addActivePastQuestion} from "./../actions";
+import {addUni_info, addActiveCourseTopics, addActiveCourseData, addActivePastQuestion} from "./../actions";
 
 class NavSideBar extends React.Component {
 onCourseHandler (uni_info, courses, list) {
@@ -31,18 +31,16 @@ onCourseHandler (uni_info, courses, list) {
             pastQuestions.question_data.map((pastQuestion) => {
                 pastQuestion.questions.map((question) => {
                     topics.push(question.topic)
-                    console.log(pastQuestion)
                     pastQuestionYears.push({
                         year: pastQuestions.year,
+                        session: pastQuestion.header.session,
                         semester_exam: pastQuestion.header.exam
                     })
                 })
             })
             })  
             // this.props.addActiveCourseTopics([...new Set(topics)]) //this is a new es6way of filtering data on an array
-            // this.props.addActiveCoureYears(pastQuestionYears)
             this.onYearHandler({uni_info, courseInfo, course, topics: [...new Set(topics)], pastQuestionYears}, li)
-
         }
         a.appendChild(text)
         span.appendChild(checkbox)
@@ -54,7 +52,6 @@ onCourseHandler (uni_info, courses, list) {
     }
 }
 onYearHandler (course_infos, list) {
-    console.log(course_infos, list)
     if(list.classList.contains("active") && list.querySelector("ol")){
         list.removeChild(list.querySelector("ol"));
     } else {
@@ -104,16 +101,11 @@ currentQuestion.map((question) => {
   
     a.onclick = () => {
         const {uni_info, course, topics, pastQuestionYears, courseInfo} = course_infos
-        // console.log(currentQuestion, course_infos, question)
-        console.log(course_infos,question)
         this.props.addActivePastQuestion({courseInfo, question})
         this.props.addUni_info(uni_info)
         this.props.addActiveCourseData(course)
         this.props.addActiveCourseTopics(topics) //this is a new es6way of filtering data on an array
-        this.props.addActiveCoureYears(pastQuestionYears)
-        console.log(question)
-
-        // this.props.addActivePastQuestion({courseInfo, question})
+        document.querySelector("select").selectedIndex = 0 //this is used to set the mode to test mode anytime the nav btn is clicked
         this.props.handleShowContentArea() 
         this.props.enableToolBarBtn()
         // this is used to clear the filtered question when ever a question to be appeared to the screen is clicked
@@ -140,7 +132,6 @@ currentQuestion.map((question) => {
 componentDidMount () {
     if(this.props.pastQuestionApiDatas) {
         const list = document.querySelector("#downloadedUni");
-        console.log(list)
         this.props.pastQuestionApiDatas.map((university) => {
             const uni_info = {
                 "uniName": university.name,
@@ -184,15 +175,14 @@ render () {
 }
 
 const mapStateToProps = (state, props) => ({
-    pastQuestionApiDatas : state.PastQuestionApiDatas,
+    pastQuestionApiDatas : state.PastQuestionApiDatas
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
     addUni_info : (data) =>  dispatch(addUni_info(data)),
     addActiveCourseData : (data) => dispatch(addActiveCourseData(data)),
     addActivePastQuestion: (data) => dispatch(addActivePastQuestion(data)),
-    addActiveCourseTopics: (data) => dispatch(addActiveCourseTopics(data)),
-    addActiveCoureYears: (data) => dispatch(addActiveCoureYears(data))
+    addActiveCourseTopics: (data) => dispatch(addActiveCourseTopics(data))
 })
  
 export default connect(mapStateToProps, mapDispatchToProps)(NavSideBar);

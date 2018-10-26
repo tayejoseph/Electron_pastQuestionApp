@@ -2,22 +2,21 @@ import React from "react";
 import {Modal, Button} from "react-bootstrap";
 
 const AnswerContent = (props) => {
-        console.log(props.answerData)
+        console.log(props)
         const {uniTitle, semester, exam, courseName, courseDepartment, courseTitle, year} = props.uni_course_info;
         let content = (
             <div>
             <hgroup>
             <h2>{uniTitle}</h2>
             <h2>{courseDepartment}</h2>
-            {props.answerData.answersData.topics ? <h2>Filtered Questions for {courseName}</h2> : "" }
+            {props.answerData.filteredTopics ? <h2>Filtered Questions for {courseName}</h2> : "" }
             <h2>{courseName} - {courseTitle}</h2>
-            {props.answerData.topics ? props.answerData.topics.length < 1 ? <h2>{year} {semester} {exam} Answers</h2> : "" : ""}
-            {console.log(props.answerData.topics, "111111111")}
-            {props.answerData.topics ? props.answerData.topics.length >= 1 ? (<h3>Filtered Topics: {
-                props.answerData.topics.map((topic, index) => (
+            {props.answerData.filteredTopics ? props.answerData.filteredTopics.length < 1 ? <h2>{year} {semester} {exam} Answers</h2> : "" : ""}
+            {props.answerData.filteredTopics ? props.answerData.filteredTopics.length >= 1 ? (<h3>Filtered Topics: {
+                props.answerData.filteredTopics.map((topic, index) => (
                     <span key = {index}>
                     {
-                    (props.answerData.topics[props.answerData.topics.length -1] === topic) ? (
+                    (props.answerData.filteredTopics[props.answerData.filteredTopics.length -1] === topic) ? (
                         <span>{topic} .</span>
                     ) : (
                         <span>{topic}, </span>
@@ -29,7 +28,7 @@ const AnswerContent = (props) => {
             </hgroup>
             {props.answerData.answersData.map((answer, index) => (
                 <div key = {index}>
-                {props.answerData.topics ? <p>{answer.semester}</p> : "" }
+                {props.answerData.filteredTopics ? <p>{answer.semester_year}</p> : "" }
                 <p><span style = {{"marginRight": "10px"}}>{answer.num}. </span>{answer.answer}</p>
                 </div>
             ))

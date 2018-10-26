@@ -13,36 +13,52 @@ constructor(props) {
         question_info: {},
         questions: [],
         filterDataReceived: false,
-        answerData : {
-            topics: [],
-            answersData: []
-        }
+        filteredTopics: [],
+        filteredQuestions: [],
+        answersData: []
     }
 }
 componentWillReceiveProps(newProps) {
+    const {currentQuestionData, filteredDatas, uni_info} = newProps;
     console.log(newProps)
-    if(newProps.currentQuestionData) {
-        const answersData = [];
+    const answersData = [];
+    if(currentQuestionData !== this.props.currentQuestionData) { //u naeed to correct this later
+    const {courseInfo, question} = currentQuestionData;
     this.setState({
-        course_info: newProps.currentQuestionData.courseInfo,
-        uni_info: newProps.uni_info,
-        filterInitDatas: this.props.filterInitDatas,
-        question_info: newProps.currentQuestionData.question.header,
-        questions: newProps.currentQuestionData.question.questions
+        course_info: courseInfo,
+        uni_info: uni_info,
+        question_info: question.header,
+        questions: question.questions,
+        filteredQuestions: []
     })
-    newProps.currentQuestionData.question.questions.map((question, index) => {
+    question.questions.map((question, index) => {
         console.log(question)
         answersData.push({
             num: index+1,
             answer: question.answer
         })
     })
-    this.setState((prevState) => ({
-        answerData: {
-            ...prevState.answerData,
+    this.setState({
             answersData
-        }
-    }))
+        })
+    } else if(filteredDatas !== this.props.filteredDatas) {
+    const {filteredTopics, filteredQuestions} = filteredDatas
+    this.setState({
+        filteredTopics,
+        filteredQuestions
+    })
+    console.log(filteredQuestions)
+    filteredQuestions.map((filteredQuestion, index) => {
+            answersData.push({
+                semester_year: filteredQuestion.semester_year,
+                num: index+1,
+                answer: filteredQuestion.questionData.answer
+            })
+        })
+    this.setState({
+            answersData
+        })
+        console.log(this.state.filteredQuestions)
     }
 }
 componentWillMount() {
@@ -50,7 +66,6 @@ componentWillMount() {
     this.setState({
         course_info: this.props.currentQuestionData.courseInfo,
         uni_info: this.props.uni_info,
-        filterInitDatas: this.props.filterInitDatas,
         question_info: this.props.currentQuestionData.question.header,
         questions: this.props.currentQuestionData.question.questions
     })
@@ -61,28 +76,30 @@ componentWillMount() {
             answer: question.answer
         })
     })
-    this.setState((prevState) => ({
-        answerData: {
-            ...prevState.answerData,
+    this.setState({
             answersData
-        }
-    }))
-
+        })
 }
 render () {
     let content;
-    const {uniTitle, uniLogo, uniLocation} = this.state.uni_info;
-    const {courseName, courseDepartment, courseTitle, year} = this.state.course_info;
-    const {exam, instruction, questionType, semester, time} = this.state.question_info;
-    const questions = this.state.questions
-    if(!this.state.filterDataReceived) {
+    const {filteredTopics, filteredQuestions, question_info, questions, course_info, uni_info} = this.state
+    const {uniTitle, uniLogo, uniLocation} = uni_info;
+    const {courseName, courseDepartment, courseTitle, year} = course_info;
+    const {exam, instruction, questionType, session, time} = question_info;
+    const header = (
+        <React.Fragment>
+            <h2>{uniTitle}, {uniLocation.state}, {uniLocation.country} .</h2>
+            <h2>{courseDepartment}</h2>
+            <h2>{year} {session} {exam}</h2>
+            <h2>{courseName} - {courseTitle}</h2>
+        </React.Fragment>
+    )
+    console.log(filteredQuestions)
+    if(filteredQuestions.length === 0) {
         content = (
             <div>
             <hgroup>
-            <h2>{uniTitle}, {uniLocation.state}, {uniLocation.country} .</h2>
-            <h2>{courseDepartment}</h2>
-            <h2>{year} {semester} {exam}</h2>
-            <h2>{courseName} - {courseTitle}</h2>
+            {header}
             </hgroup>
             {
                 questions.map((question, index) => {
@@ -112,22 +129,69 @@ render () {
             </div>
             
         )
-    }
-    console.log(this.state)
+    } else {
+        content = (
+            <div>
+            <hgroup>
+            {header}
+            {filteredTopics ? filteredTopics.length >= 1 ? (<h3>Filtered Topics: {
+                filteredTopics.map((topic, index) => (
+                    <span key = {index}>
+                    {
+                    (filteredTopics[filteredTopics.length -1] === topic) ? (
+                        <span>{topic} .</span>
+                    ) : (
+                        <span>{topic}, </span>
+                    )
+                    }
+                </span>
+                ))
+            }</h3>) : "" : "" }
+            </hgroup>                
+            {console.log(filteredQuestions)}
+
+            {
+                filteredQuestions.map((questionDatas, index) => {
+                return (
+                        <div key = {index}>
+                        <p>{questionDatas.semester_year}</p>
+                        <p><span style = {{"marginRight": "20px"}}>{index + 1}</span>{questionDatas.questionData.question}</p> 
+                      {
+                        this.props.showSolution ? (questionDatas.questionData.answer ? (
+                            <p><span style = {{"marginRight": "20px"}}>Answer:</span>{questionDatas.questionData.answer}</p>   
+                      ) : ("")) 
+                      : ("")
+                      }
+                      {
+                           this.props.showSolution ? 
+                           (questionDatas.questionData.solution ? (
+                          <div id = "solution">
+                          <p>solution</p>
+                          <p>{questionDatas.questionData.solution}</p>
+                          </div> ) 
+                          : (""))
+                       : ("")
+                      }
+                        </div>
+            )
+            })
+            }
+            </div>
+            
+        )    }
     return (
         <div id = "ContentArea">
         {content}
 
         <AnswerContent 
         uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
-        answerData = {this.state.answerData}
+        answerData = {{filteredTopics: this.state.filteredTopics, answersData: this.state.answersData}}
         answerModal = {this.props.answerModal}
         handleAnswerModalHide = {this.props.handleAnswerModalHide}
         />
 
         <FilterContent 
         uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
-        courseData = {this.state.filterInitDatas}
         filterModal = {this.props.filterModal}
         handleFilterModalHide = {this.props.handleFilterModalHide}
         />
@@ -140,7 +204,7 @@ render () {
 const mapStateToProps = (state, props) => ({
     currentQuestionData: state.ActivePastQuestionDatas.currentQuestionData,
     uni_info: state.ActivePastQuestionDatas.uni_info,
-    filterInitDatas: state.ActivePastQuestionDatas.activeCourseDatas
+    filteredDatas: state.ActivePastQuestionDatas.filteredDatas
 })
 
 
