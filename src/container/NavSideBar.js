@@ -101,10 +101,10 @@ currentQuestion.map((question) => {
   
     a.onclick = () => {
         const {uni_info, course, topics, pastQuestionYears, courseInfo} = course_infos
-        this.props.addActivePastQuestion({courseInfo, question})
         this.props.addUni_info(uni_info)
         this.props.addActiveCourseData(course)
         this.props.addActiveCourseTopics(topics) //this is a new es6way of filtering data on an array
+        this.props.addActivePastQuestion({courseInfo, question})
         document.querySelector("select").selectedIndex = 0 //this is used to set the mode to test mode anytime the nav btn is clicked
         this.props.handleShowContentArea() 
         this.props.enableToolBarBtn()

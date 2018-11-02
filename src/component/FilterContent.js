@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Modal, OverlayTrigger, Button, Tooltip, Popover} from "react-bootstrap";
+import {Modal, FormGroup, Checkbox, OverlayTrigger, Button, Tooltip, Popover} from "react-bootstrap";
 import {addFilteredData} from "./../actions"
 
 class FilterContent extends React.Component {
@@ -42,7 +42,9 @@ class FilterContent extends React.Component {
     }
     }
     filterQuestions = () => {
+        //U NEED TO RECHECK THE CHECKBOXES THEY ARE HAVING SOME PROBLEMS
        const {checkedTopics, checkedQuestions} = this.state;
+       let notFoundMessage = []; //for topics not found I NEED TO CHECK THIS LATER
     //    let inputs = document.getElementsByTagName("input") //I may need to effect this disabling the check box again
     //    console.log(inputs)
         if (checkedTopics.length > 0 && checkedQuestions.length > 0) {
@@ -62,6 +64,8 @@ class FilterContent extends React.Component {
                                     questionData: questionItem,
                                     semester_year : paper   
                                 }) 
+                            } else {
+                                //this will contain the section that will write message for past question that do not contain the topic
                             }
                         })
                         
