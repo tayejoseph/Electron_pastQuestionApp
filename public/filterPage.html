@@ -132,7 +132,7 @@ class FilterPage extends React.Component {
 
         let filterPageContent;
         if(this.state.filterDatas) {
-        const {activeCourseName, activeCourseData} = this.state.filterDatas
+        const {activecourse_name, activeCourseData} = this.state.filterDatas
         console.log(activeCourseData)
         let Topics = [];
         let courseTopic;
@@ -143,7 +143,7 @@ class FilterPage extends React.Component {
             course.question_data.map((questionCover) => {
                 questionPresentDatas.push({
                     "question_year": `${course.year}`,
-                    "course": `${activeCourseName}`,
+                    "course": `${activecourse_name}`,
                     "paperTitle": `${questionCover.header.semester}`
                 })
                questionCover.questions.map((question) => {
@@ -179,9 +179,9 @@ class FilterPage extends React.Component {
          filterPageContent = (
             <div>
                 <h1>Filter Question</h1>
-                <h2>{activeCourseName} Topics</h2> 
+                <h2>{activecourse_name} Topics</h2> 
                 {courseTopic}
-                <h2>{activeCourseName} question Year</h2>
+                <h2>{activecourse_name} question Year</h2>
                 {questionYear}
                 <button onClick = {this.filterQuestions}>filter</button>
                 <button onClick = {this.closeWindow}>Cancel</button>

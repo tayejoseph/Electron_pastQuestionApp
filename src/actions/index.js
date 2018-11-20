@@ -15,7 +15,12 @@ export const addActiveCourseData = (data) => ({
     data
 })
 
-export const addActivePastQuestion = (data) => ({
+export const addActiveCourseYears = (data) => ({
+    type: "ADD_ACTIVE_COURSE_YEARS",
+    data
+})
+
+export const addActivePastQuestionData = (data) => ({
     type: "ADD_ACTIVE_PASTQUESTION",
     data
 })

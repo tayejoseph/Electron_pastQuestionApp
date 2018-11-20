@@ -9,8 +9,10 @@ import DownloadArea from "./DownloadPage";
 import UploadArea from "./UploadPage";
 import WelcomeArea from "./WelcomePage";
 import Bottomsection from "./Bottomsection";
+import SignInArea from "./SignInArea";
+import SignInWelcomeArea from "./SignInWelcomeArea";
 
-
+//I NEED TO ADD THE DOWNLOAD BTN AS SOON THE WELCOME PAGE IS OFF THE SCREEN
 
 class MainArea extends React.Component {
 constructor(props) {
@@ -23,8 +25,10 @@ constructor(props) {
         showContentArea: false,
         showWelcomeArea: true,
         showFeedBackArea: false,
-        showDownloadArea: false,
-        showBottomSection: false
+        showDownloadArea: false, 
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: false,
 
     }
 }
@@ -64,7 +68,9 @@ handleShowDownloadArea = () => {
         showFeedBackArea: false,
         showWelcomeArea: false,
         showDownloadArea: true,
-        showBottomSection: true
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: false,
     })
 }
  handleShowUploadArea = () => {
@@ -75,8 +81,10 @@ handleShowDownloadArea = () => {
         showContentArea: false,
         showFeedBackArea: false,
         showWelcomeArea: false,
-        showDownloadArea: false,
-        showBottomSection: true
+        showDownloadArea: false, 
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: false,
     })
 }
 handleShowContentAreaArea = () => {
@@ -88,8 +96,10 @@ this.setState({
         showContentArea: true,
         showFeedBackArea: false,
         showWelcomeArea: false,
-        showDownloadArea: false,
-        showBottomSection: false
+        showDownloadArea: false, 
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: false,
     })    
 }
 handleShowFeedBackArea = () => {
@@ -100,11 +110,40 @@ handleShowFeedBackArea = () => {
         showContentArea: false,
         showFeedBackArea: true,
         showWelcomeArea: false,
-        showDownloadArea: false,
-        showBottomSection: true
+        showDownloadArea: false, 
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: false,
     })
 }
-
+handlerShowSignInArea = () => {
+    this.setState({
+        disableToolBarBtn: true,
+        disableModeBtn: true,
+        showUploadArea: false,
+        showContentArea: false,
+        showFeedBackArea: false,
+        showWelcomeArea: false,
+        showDownloadArea: false, 
+        showSignInArea: true,
+        showBottomSection: false, 
+        showPersonAccount: false,
+    })  
+}
+handleShowPersonAccount = () => {
+    this.setState({
+        disableToolBarBtn: true,
+        disableModeBtn: true,
+        showUploadArea: false,
+        showContentArea: false,
+        showFeedBackArea: false,
+        showWelcomeArea: false,
+        showDownloadArea: false, 
+        showSignInArea: false,
+        showBottomSection: false, 
+        showPersonAccount: true,
+    })  
+}
 handleAnswerModal = () => {
     this.setState({
         answerModal: true
@@ -147,17 +186,18 @@ render () {
                 handleFilterModal = {this.handleFilterModal}
                 showFeedBack = {this.handleShowFeedBackArea}
                 showDownload = {this.handleShowDownloadArea}
+                showSignInArea = {this.handlerShowSignInArea}
                 showUpload = {this.handleShowUploadArea}
                 />
             </Row>
             <Row style = {{"marginTop": "50px", "height": "calc(100vh - 50px)"}}>
-                <Col className = "Column" sm = {2}>
+                <Col className = "Column" sm = {3}>
                 <NavSideBar 
                 enableToolBarBtn = {this.enableToolBarBtn}
                 handleShowContentArea = {this.handleShowContentAreaArea}
                 />
                 </Col>
-                <Col className = "Column" style = {{}} sm = {10}>
+                <Col className = "Column" style = {{}} sm = {9}>
                 {this.state.showWelcomeArea ? <WelcomeArea /> : 
                 <React.Fragment>
                 {this.state.showContentArea ? 
@@ -170,8 +210,12 @@ render () {
                 /> : 
                 <React.Fragment>
                 {this.state.showUploadArea ? <UploadArea /> : ""}
+                {this.state.showSignInArea ? <SignInArea showPersonAccount = {this.handleShowPersonAccount} /> : ""}
                 {this.state.showDownloadArea ? <DownloadArea /> : ""}
                 {this.state.showFeedBackArea ? <FeedBackArea /> : ""}
+
+
+                {this.state.showPersonAccount ? <SignInWelcomeArea /> : ""}
                 {/* {this.state.showBottomSection ? 
                     <Bottomsection />
                  : ""} */}

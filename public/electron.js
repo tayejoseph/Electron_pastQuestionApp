@@ -67,7 +67,7 @@ mainWindow.on("closed", () => (mainWindow = null));
 
 // ipcMain.on("filter:datas", (event, data) => {
 // console.log(data)
-// FilterWindow.setTitle(`filter ${data.activeCourseName} question`)
+// FilterWindow.setTitle(`filter ${data.activecourse_name} question`)
 // FilterWindow.webContents.send("filter:datas", data)
 // })
 

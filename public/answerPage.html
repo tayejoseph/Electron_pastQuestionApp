@@ -41,15 +41,15 @@ class AnswerPage extends React.Component {
     }
     render () {
         console.log(this.state.answers, "shhhhhhhh")
-        const {uniTitle, semester, exam, courseName, courseDepartment, courseTitle, year} = this.state.course_info;
+        const {uni_title, semester, exam, course_name, courseDepartment, course_title, year} = this.state.course_info;
         console.log(this.state.answers)
         let content = (
             <div>
             <hgroup>
-            <h2>{uniTitle}</h2>
+            <h2>{uni_title}</h2>
             <h2>{courseDepartment}</h2>
-            {this.state.answers.topics ? <h2>Filtered Questions for {courseName}</h2> : "" }
-            <h2>{courseName} - {courseTitle}</h2>
+            {this.state.answers.topics ? <h2>Filtered Questions for {course_name}</h2> : "" }
+            <h2>{course_name} - {course_title}</h2>
             {this.state.topics ? this.state.topics.length < 1 ? <h2>{year} {semester} {exam} Answers</h2> : "" : ""}
             {console.log(this.state.topics, "111111111")}
             {this.state.topics ? this.state.topics.length >= 1 ? (<h3>Filtered Topics: {

@@ -1,12 +1,14 @@
 import React from "react";
 
-
 class DownloadPage extends React.Component {
     render () {
         return (
             <div id = "DownloadPage">
-                            <h1>This si the Download page</h1>
-
+            <p>This is the download page</p>
+            <div>Download App For Android</div>
+            <button>Download</button>
+            <div>Download App For ios</div>
+            <button>Download</button>
             </div>
         )
     }

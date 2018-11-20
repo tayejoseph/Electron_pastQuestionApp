@@ -20,11 +20,11 @@ class FilterContent extends React.Component {
                    value
             ]
         })
-    } else {
-        this.setState((prevState) => ({
-            checkedTopics: prevState.checkedTopics.filter((topics) => topics !== value) //this will remove the unchecked topic form the array
-        }))
-    }
+        } else {
+            this.setState((prevState) => ({
+                checkedTopics: prevState.checkedTopics.filter((topics) => topics !== value) //this will remove the unchecked topic form the array
+            }))
+        }
     }
     questionCheckHandler = (e) => {
         const value = e.target.value ? e.target.value : ""
@@ -35,11 +35,11 @@ class FilterContent extends React.Component {
                   value
             ]
         })
-    } else {
-        this.setState((prevState) => ({
-            checkedQuestions: prevState.checkedQuestions.filter((questions) => questions !== value)
-        }))
-    }
+        } else {
+            this.setState((prevState) => ({
+                checkedQuestions: prevState.checkedQuestions.filter((questions) => questions !== value)
+            }))
+        }
     }
     filterQuestions = () => {
         //U NEED TO RECHECK THE CHECKBOXES THEY ARE HAVING SOME PROBLEMS
@@ -50,12 +50,14 @@ class FilterContent extends React.Component {
         if (checkedTopics.length > 0 && checkedQuestions.length > 0) {
             const filteredQuestions = []
             const filteredTopics = []
+            console.log(checkedTopics, checkedQuestions)
         checkedQuestions.map((paper) => {
-            const year_Semester = paper.split(" ");
+            const year_Semester = paper.toLowerCase().split(" ");
             this.props.activeCourseData.past_questions.map((questionPaper) => {
-                if(questionPaper.year === year_Semester[0]){
-                questionPaper.question_data.map((questionWrapper) => {
-                    if(questionWrapper.header.session === year_Semester[1] && questionWrapper.header.exam === `${year_Semester[3]} ${year_Semester[4]}`) {
+                console.log(questionPaper)
+                if(questionPaper.question_year === year_Semester[0]){
+                questionPaper.question_datas.map((questionWrapper) => {
+                    if(questionWrapper.header.session.toLowerCase() === year_Semester[1] && questionWrapper.header.examType.toLowerCase() === `${year_Semester[3]} ${year_Semester[4]}`) {
                         checkedTopics.map((topic) => {
                         questionWrapper.questions.map((questionItem) => {
                             if(topic === questionItem.topic) {
@@ -75,7 +77,7 @@ class FilterContent extends React.Component {
             }
             })
         })
-
+        console.log(filteredQuestions)
         //note u need to do something if the filtered question array is empty
         //note i need to add a tool tip for all the topics so that when ever any user put the cursor on a past question he or she can have an idea of the topic that are available for that question
             if(filteredQuestions.length > 0) { //this check if the topics picked where found in the questions picked before sending it to the state
@@ -85,22 +87,7 @@ class FilterContent extends React.Component {
             })
             this.props.handleFilterModalHide()   
             }
-            }
-            this.setState({
-                checkedQuestions: [],
-                checkedTopics: []
-            })  
-    }
-    closeWindow () {
-        //u need to work very well in the unchecking th check btn its not wrking fine
-        let inputs = document.getElementsByTagName("input")
-         this.setState({
-            checkedQuestions: [],
-            checkedTopics: []
-        })
-        Array.from(inputs, (input) => {
-            input.checked = false
-        })
+        } 
     }
     render () {
         console.log(this.props.activeCourseData)
@@ -115,13 +102,13 @@ class FilterContent extends React.Component {
         </ul>
         <ul>
         <p>Pick the Past Questions You Want Your Filtered Questions To Come From</p>
+        {console.log(this.props.activeCourseData.past_questions)}
         {this.props.activeCourseData.past_questions.map((pastQuestions) => (
-            pastQuestions.question_data.map((pastQuestion) => (
-                <li><input type = "checkbox" onClick = {this.questionCheckHandler} value = {`${pastQuestions.year} ${pastQuestion.header.session} session ${pastQuestion.header.exam}`} />
-                {`${pastQuestions.year} ${pastQuestion.header.session} session ${ pastQuestion.header.exam}`}
-                </li>   
-
-            ))
+            pastQuestions.question_datas.map((pastQuestion) => (
+                <li><input type = "checkbox" onClick = {this.questionCheckHandler} value = {`${pastQuestions.question_year} ${pastQuestion.header.session} session ${pastQuestion.header.examType}`} />
+                {`${pastQuestions.question_year} ${pastQuestion.header.session} session ${ pastQuestion.header.examType}`}
+                </li> 
+                ))
         ))
         }
         </ul>

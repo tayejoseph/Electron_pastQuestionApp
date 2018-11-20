@@ -37,7 +37,7 @@ const unis = [
                                             {"a": "3"},
                                             {"b" : "2"},
                                             {"d": "4"},
-                                            {"c": "56"},
+                                            {"c": "56"}
                                         ],
                                         "answer": "g",
                                         "solution": "aksksjdjkjdsfkjfksj" 

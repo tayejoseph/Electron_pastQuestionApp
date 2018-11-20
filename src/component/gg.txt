@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {addUni_info, addActiveCoureYears, addActiveCourseTopics, addActiveCourseData, addActivePastQuestion} from "./../actions";
+import {addUni_info, addActiveCoureYears, addActiveCourseTopics, addActiveCourseData, addActivePastQuestionData} from "./../actions";
 
 class NavSideBar extends React.Component {
 onCourseHandler (courses, list) {
@@ -19,9 +19,9 @@ onCourseHandler (courses, list) {
         const li = document.createElement("li")
         const text = document.createTextNode(course.name);
         const courseInfo = {
-            courseName: `${course.name}`,
+            course_name: `${course.name}`,
             courseDepartment: `${course.department}`,
-            courseTitle: `${course.title}`
+            course_title: `${course.title}`
         }
         a.onclick = () => {
             this.onYearHandler(courseInfo, course, li)
@@ -35,7 +35,7 @@ onCourseHandler (courses, list) {
                     console.log(pastQuestion)
                     pastQuestionYears.push({
                         year: pastQuestions.year,
-                        semester_exam: pastQuestion.header.exam
+                        semester_exam: pastQuestion.header.examType
                     })
                 })
             })
@@ -96,12 +96,12 @@ currentQuestion.map((question) => {
     const a = document.createElement('a')
     const checkbox = document.createElement("input")
     checkbox.setAttribute("type", "checkbox")
-    checkbox.setAttribute("value", question.header.exam) 
+    checkbox.setAttribute("value", question.header.examType) 
     const li = document.createElement("li")
-    const text = document.createTextNode(question.header.exam);
+    const text = document.createTextNode(question.header.examType);
   
     a.onclick = () => {
-        this.props.addActivePastQuestion({courseInfo, question})
+        this.props.addActivePastQuestionData({courseInfo, question})
         this.props.handleShowContentArea() 
         this.props.enableToolBarBtn()
         //this is used to clear the filtered question when ever a question to be appeared to the screen is clicked
@@ -133,9 +133,9 @@ componentDidMount () {
         this.props.pastQuestionApiDatas.map((university) => {
             const uni_info = {
                 "uniName": university.name,
-                "uniTitle": university.title,
+                "uni_title": university.title,
                 "uniLogo": university.logo,
-                "uniLocation": university.location
+                "uni_location": university.location
             }
         const span = document.createElement("span")
         span.setAttribute("id", "list")
@@ -179,7 +179,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch, props) => ({
     addUni_info : (data) =>  dispatch(addUni_info(data)),
     addActiveCourseData : (data) => dispatch(addActiveCourseData(data)),
-    addActivePastQuestion: (data) => dispatch(addActivePastQuestion(data)),
+    addActivePastQuestionData: (data) => dispatch(addActivePastQuestionData(data)),
     addActiveCourseTopics: (data) => dispatch(addActiveCourseTopics(data)),
     addActiveCoureYears: (data) => dispatch(addActiveCoureYears(data))
 })

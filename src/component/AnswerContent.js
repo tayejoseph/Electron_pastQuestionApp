@@ -3,14 +3,14 @@ import {Modal, Button} from "react-bootstrap";
 
 const AnswerContent = (props) => {
         console.log(props)
-        const {uniTitle, semester, exam, courseName, courseDepartment, courseTitle, year} = props.uni_course_info;
+        const {uni_title, semester, exam, course_name, courseDepartment, course_title, year} = props.uni_course_info;
         let content = (
             <div>
             <hgroup>
-            <h2>{uniTitle}</h2>
+            <h2>{uni_title}</h2>
             <h2>{courseDepartment}</h2>
-            {props.answerData.filteredTopics ? <h2>Filtered Questions for {courseName}</h2> : "" }
-            <h2>{courseName} - {courseTitle}</h2>
+            {props.answerData.filteredTopics ? <h2>Filtered Questions for {course_name}</h2> : "" }
+            <h2>{course_name} - {course_title}</h2>
             {props.answerData.filteredTopics ? props.answerData.filteredTopics.length < 1 ? <h2>{year} {semester} {exam} Answers</h2> : "" : ""}
             {props.answerData.filteredTopics ? props.answerData.filteredTopics.length >= 1 ? (<h3>Filtered Topics: {
                 props.answerData.filteredTopics.map((topic, index) => (

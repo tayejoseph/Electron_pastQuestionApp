@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Button, ButtonToolbar, FormGroup, FormControl} from "react-bootstrap";
 
 
@@ -16,6 +17,7 @@ feedBackHandler = () => (
 downloadHandler = () => (
     this.props.showDownload()
 )
+
 modalClickHandler = (e) => {
     if(e.target.innerHTML === "Answer") {
         this.props.handleAnswerModal()
@@ -23,13 +25,16 @@ modalClickHandler = (e) => {
         this.props.handleFilterModal()
     }
 }
+signInHandler = () => (
+    this.props.showSignInArea()
+)
 modeChangeHandler = (e) => {
     this.props.handleModeChange(e.target.value)
 //i need to set the value to test mode when ever the side bar btn is click
 }
 
 
-
+// WHEN THE USER IS LOGGED IN YOU SHLD BE ABLE TO ADD A SETTING BTN WHERE THE USER CAN ADD QUESTION FOR HIS ACCOUNT AND 
 render () {
     return (
             <Navbar fixedTop>  
@@ -42,14 +47,20 @@ render () {
                 <option value="Test">Test Mode</option>
                 <option value="Exam">Exam Mode</option>
                 </select>
-                <Button onClick = {this.timerClick}>Timer</Button>
-                <Button onClick = {this.downloadHandler}>Download</Button>
+                {/* if this the props. signInData exist the this commented code below will start working */}
+                {/* All this commented code will be active once the user submit and create and account */}
+                {/* <Button onClick = {this.timerClick}>Timer</Button> */}
                 <Button onClick = {this.openUploadHandler}>Upload</Button>
+                <Button onClick = {this.signInHandler}>Signin/Login</Button>
                 <Button onClick = {this.feedBackHandler}>FeedBack</Button>
+                {this.props.currentQuestionData.uni_info ? <Button onClick = {this.downloadHandler}>Download</Button> : ""}
             </Navbar.Form>
             </Navbar>
     )
 }
 }
 
-export default ToolBar;
+const mapStateToProps = (state, props) => ({
+    currentQuestionData: state.ActivePastQuestionDatas.currentQuestionData
+})
+export default connect(mapStateToProps, null)(ToolBar);

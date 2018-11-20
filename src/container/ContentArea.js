@@ -8,10 +8,10 @@ class ContentArea extends React.Component {
 constructor(props) {
     super(props)
     this.state = {
-        course_info: {},
-        uni_info: {},
-        question_info: {},
-        questions: [],
+        course_info: this.props.currentQuestionData.course_info,
+        uni_info: this.props.currentQuestionData.uni_info,
+        question_info: this.props.currentQuestionData.questionData.header,
+        questions: this.props.currentQuestionData.questionData.questions,
         filterDataReceived: false,
         filteredTopics: [],
         filteredQuestions: [],
@@ -19,19 +19,20 @@ constructor(props) {
     }
 }
 componentWillReceiveProps(newProps) {
-    const {currentQuestionData, filteredDatas, uni_info} = newProps;
+    console.log(newProps)
+    const {currentQuestionData, filteredDatas} = newProps;
     console.log(newProps)
     const answersData = [];
     if(currentQuestionData !== this.props.currentQuestionData) { //u naeed to correct this later
-    const {courseInfo, question} = currentQuestionData;
+    const {course_info, questionData, uni_info} = currentQuestionData;
     this.setState({
-        course_info: courseInfo,
+        course_info: course_info,
         uni_info: uni_info,
-        question_info: question.header,
-        questions: question.questions,
+        question_info: questionData.header,
+        questions: questionData.questions,
         filteredQuestions: []
     })
-    question.questions.map((question, index) => {
+    questionData.questions.map((question, index) => {
         console.log(question)
         answersData.push({
             num: index+1,
@@ -63,14 +64,7 @@ componentWillReceiveProps(newProps) {
 }
 componentWillMount() {
     const answersData = [];
-    this.setState({
-        course_info: this.props.currentQuestionData.courseInfo,
-        uni_info: this.props.uni_info,
-        question_info: this.props.currentQuestionData.question.header,
-        questions: this.props.currentQuestionData.question.questions
-    })
-    this.props.currentQuestionData.question.questions.map((question, index) => {
-        console.log(question)
+    this.props.currentQuestionData.questionData.questions.map((question, index) => {
         answersData.push({
             num: index+1,
             answer: question.answer
@@ -81,17 +75,18 @@ componentWillMount() {
         })
 }
 render () {
+    console.log(this.state)
     let content;
     const {filteredTopics, filteredQuestions, question_info, questions, course_info, uni_info} = this.state
-    const {uniTitle, uniLogo, uniLocation} = uni_info;
-    const {courseName, courseDepartment, courseTitle, year} = course_info;
+    const {uni_fullName, uniLogo, uni_location} = uni_info;
+    const {course_name, courseDepartment, course_title, year} = course_info;
     const {exam, instruction, questionType, session, time} = question_info;
     const header = (
         <React.Fragment>
-            <h2>{uniTitle}, {uniLocation.state}, {uniLocation.country} .</h2>
+            <h2>{uni_fullName}, {uni_location.state}, {uni_location.country} .</h2>
             <h2>{courseDepartment}</h2>
             <h2>{year} {session} {exam}</h2>
-            <h2>{courseName} - {courseTitle}</h2>
+            <h2>{course_name} - {course_title}</h2>
         </React.Fragment>
     )
     console.log(filteredQuestions)
@@ -182,20 +177,21 @@ render () {
     return (
         <div id = "ContentArea">
         {content}
-
-        <AnswerContent 
-        uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
-        answerData = {{filteredTopics: this.state.filteredTopics, answersData: this.state.answersData}}
-        answerModal = {this.props.answerModal}
-        handleAnswerModalHide = {this.props.handleAnswerModalHide}
-        />
-
-        <FilterContent 
-        uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
-        filterModal = {this.props.filterModal}
-        handleFilterModalHide = {this.props.handleFilterModalHide}
-        />
-
+        {   
+            this.props.answerModal ? <AnswerContent 
+            uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
+            answerData = {{filteredTopics: this.state.filteredTopics, answersData: this.state.answersData}}
+            answerModal = {this.props.answerModal}
+            handleAnswerModalHide = {this.props.handleAnswerModalHide}
+            /> : ""
+        }
+        {
+            this.props.filterModal ? <FilterContent 
+            uni_course_info = {{...this.state.uni_info, ...this.state.course_info}}
+            filterModal = {this.props.filterModal}
+            handleFilterModalHide = {this.props.handleFilterModalHide}
+            /> : ""
+        }
         </div>
     )   
 }
